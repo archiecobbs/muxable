@@ -267,11 +267,11 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/Cha
 <div class="block">Access the queue of incoming <a href="../../../org/dellroad/muxable/NestedChannelRequest.html" title="interface in org.dellroad.muxable"><code>NestedChannelRequest</code></a>s initiated from the remote side.
 
  <p>
- Each <a href="../../../org/dellroad/muxable/NestedChannelRequest.html" title="interface in org.dellroad.muxable"><code>NestedChannelRequest</code></a> corresponds to a remote invocation of <a href="../../../org/dellroad/muxable/MuxableChannel.html#newNestedChannelRequest-byte:A-boolean-boolean-"><code>newNestedChannelRequest(byte[], boolean, boolean)</code></a>.
- Moreover, the order of requests is preserved.
+ Each <a href="../../../org/dellroad/muxable/NestedChannelRequest.html" title="interface in org.dellroad.muxable"><code>NestedChannelRequest</code></a> corresponds to a remote invocation of
+ <a href="../../../org/dellroad/muxable/MuxableChannel.html#newNestedChannelRequest-byte:A-boolean-boolean-"><code>newNestedChannelRequest()</code></a>. Moreover, the order of requests is preserved.
 
  <p>
- Note: no special change happens to the returned <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/BlockingQueue.html?is-external=true" title="class or interface in java.util.concurrent"><code>BlockingQueue</code></a> once this instance is <a href="../../../org/dellroad/muxable/MuxableChannel.html#close--"><code>close()</code></a>'d;
+ Note: no special change happens to the returned <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/BlockingQueue.html?is-external=true" title="class or interface in java.util.concurrent"><code>BlockingQueue</code></a> once this instance is closed;
  instead, new reqeusts simply stop appearing. Therefore, after closing this instance, any thread(s)
  that are blocked polling for new data may need to be woken up via <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html?is-external=true#interrupt--" title="class or interface in java.lang"><code>Thread.interrupt()</code></a>.</div>
 <dl>

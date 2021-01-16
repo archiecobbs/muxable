@@ -34,10 +34,10 @@ public interface NestedChannelRequest {
     byte[] getRequestData();
 
     /**
-     * Get the input channel, if any.
+     * Get the input channel, if any. This corresponds to the output channel on the remote side.
      *
      * <p>
-     * The returned channel will typically also implement {@link InterruptibleChannel}, but this is implementation-dependent.
+     * The returned channel will typically also implement {@link InterruptibleChannel}, but that is implementation-dependent.
      *
      * <p>
      * In some implementations, {@link #getInput} and {@link #getOutput} may return the same channel; this is explicitly permitted.
@@ -47,10 +47,10 @@ public interface NestedChannelRequest {
     ReadableByteChannel getInput();
 
     /**
-     * Get the output channel, if any.
+     * Get the output channel, if any. This corresponds to the input channel on the remote side.
      *
      * <p>
-     * The returned channel will typically also implement {@link InterruptibleChannel}, but this is implementation-dependent.
+     * The returned channel will typically also implement {@link InterruptibleChannel}, but that is implementation-dependent.
      *
      * <p>
      * In some implementations, {@link #getInput} and {@link #getOutput} may return the same channel; this is explicitly permitted.

@@ -83,11 +83,11 @@ public interface MuxableChannel extends Channel {
      * Access the queue of incoming {@link NestedChannelRequest}s initiated from the remote side.
      *
      * <p>
-     * Each {@link NestedChannelRequest} corresponds to a remote invocation of {@link #newNestedChannelRequest}.
-     * Moreover, the order of requests is preserved.
+     * Each {@link NestedChannelRequest} corresponds to a remote invocation of
+     * {@link #newNestedChannelRequest newNestedChannelRequest()}. Moreover, the order of requests is preserved.
      *
      * <p>
-     * Note: no special change happens to the returned {@link BlockingQueue} once this instance is {@link #close}'d;
+     * Note: no special change happens to the returned {@link BlockingQueue} once this instance is closed;
      * instead, new reqeusts simply stop appearing. Therefore, after closing this instance, any thread(s)
      * that are blocked polling for new data may need to be woken up via {@link Thread#interrupt}.
      *

@@ -199,10 +199,10 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>getInput</h4>
 <pre><a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/ReadableByteChannel.html?is-external=true" title="class or interface in java.nio.channels">ReadableByteChannel</a>&nbsp;getInput()</pre>
-<div class="block">Get the input channel, if any.
+<div class="block">Get the input channel, if any. This corresponds to the output channel on the remote side.
 
  <p>
- The returned channel will typically also implement <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/InterruptibleChannel.html?is-external=true" title="class or interface in java.nio.channels"><code>InterruptibleChannel</code></a>, but this is implementation-dependent.
+ The returned channel will typically also implement <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/InterruptibleChannel.html?is-external=true" title="class or interface in java.nio.channels"><code>InterruptibleChannel</code></a>, but that is implementation-dependent.
 
  <p>
  In some implementations, <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getInput--"><code>getInput()</code></a> and <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getOutput--"><code>getOutput()</code></a> may return the same channel; this is explicitly permitted.</div>
@@ -219,10 +219,10 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>getOutput</h4>
 <pre><a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/WritableByteChannel.html?is-external=true" title="class or interface in java.nio.channels">WritableByteChannel</a>&nbsp;getOutput()</pre>
-<div class="block">Get the output channel, if any.
+<div class="block">Get the output channel, if any. This corresponds to the input channel on the remote side.
 
  <p>
- The returned channel will typically also implement <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/InterruptibleChannel.html?is-external=true" title="class or interface in java.nio.channels"><code>InterruptibleChannel</code></a>, but this is implementation-dependent.
+ The returned channel will typically also implement <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/InterruptibleChannel.html?is-external=true" title="class or interface in java.nio.channels"><code>InterruptibleChannel</code></a>, but that is implementation-dependent.
 
  <p>
  In some implementations, <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getInput--"><code>getInput()</code></a> and <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getOutput--"><code>getOutput()</code></a> may return the same channel; this is explicitly permitted.</div>
