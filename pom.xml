@@ -61,7 +61,7 @@
         <maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
         <maven.javadoc.plugin.version>3.2.0</maven.javadoc.plugin.version>
         <maven.plugin.tools.version>3.6.0</maven.plugin.tools.version>
-        <maven.project.info.reports.plugin.version>3.0.0</maven.project.info.reports.plugin.version>
+        <maven.project.info.reports.plugin.version>2.9</maven.project.info.reports.plugin.version>
         <maven.source.plugin.version>3.2.1</maven.source.plugin.version>
         <maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
         <maven.wagon.scm.extension.version>3.3.4</maven.wagon.scm.extension.version>
@@ -211,6 +211,20 @@
                 </executions>
             </plugin>
 
+            <!-- JAR -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven.jar.plugin.version}</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
             <!-- Compile -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -227,18 +241,19 @@
                 </configuration>
             </plugin>
 
-            <!-- JAR -->
+            <!-- Sources -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>${maven.jar.plugin.version}</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                        </manifest>
-                    </archive>
-                </configuration>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven.source.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- Javadoc -->
@@ -248,7 +263,6 @@
                 <version>${maven.javadoc.plugin.version}</version>
                 <configuration>
                     <notimestamp>true</notimestamp>
-                    <doclint>-reference</doclint>
                     <validateLinks>true</validateLinks>
                     <links>
                         <link>https://archiecobbs.github.io/dellroad-stuff/site/apidocs/</link>
@@ -259,21 +273,6 @@
                 <executions>
                     <execution>
                         <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- Sources -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>${maven.source.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
                         <goals>
                             <goal>jar</goal>
                         </goals>
@@ -362,18 +361,12 @@
                 <version>${maven.project.info.reports.plugin.version}</version>
             </plugin>
         </plugins>
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-scm</artifactId>
-                <version>${maven.wagon.scm.extension.version}</version>
-            </extension>
-        </extensions>
+
     </build>
     <reporting>
         <plugins>
 
-            <!-- Aggregated Javadoc -->
+            <!-- Javadoc -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -381,21 +374,8 @@
                 <inherited>false</inherited>
                 <configuration>
                     <notimestamp>true</notimestamp>
-                    <aggregate>true</aggregate>
-                    <links>
-                        <link>https://docs.oracle.com/javase/8/docs/api/</link>
-                        <link>https://www.slf4j.org/apidocs/</link>
-                    </links>
+                    <links/>
                 </configuration>
-                <reportSets>
-                    <reportSet>
-                        <id>aggregate</id>
-                        <inherited>false</inherited>
-                        <reports>
-                            <report>aggregate</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
             </plugin>
         </plugins>
     </reporting>
