@@ -68,61 +68,63 @@
         <spotbugs.maven.plugin.version>4.0.0</spotbugs.maven.plugin.version>
     </properties>
 
-    <dependencies>
+    <dependencyManagement>
+        <dependencies>
 
-        <!-- Logging -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>${log4j.version}</version>
-            <scope>provided</scope>
-        </dependency>
+            <!-- Logging -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${slf4j.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>${log4j.version}</version>
+                <scope>provided</scope>
+            </dependency>
 
-        <!-- DellRoad Stuff -->
-        <dependency>
-            <groupId>org.dellroad</groupId>
-            <artifactId>dellroad-stuff-main</artifactId>
-            <version>${dellroad-stuff.version}</version>
-        </dependency>
+            <!-- DellRoad Stuff -->
+            <dependency>
+                <groupId>org.dellroad</groupId>
+                <artifactId>dellroad-stuff-main</artifactId>
+                <version>${dellroad-stuff.version}</version>
+            </dependency>
 
-        <!-- Misc utility -->
-        <dependency>
-            <groupId>io.permazen</groupId>
-            <artifactId>permazen-util</artifactId>
-            <version>${permazen.version}</version>
-        </dependency>
+            <!-- Permazen -->
+            <dependency>
+                <groupId>io.permazen</groupId>
+                <artifactId>permazen-util</artifactId>
+                <version>${permazen.version}</version>
+            </dependency>
 
-        <!-- Testing & Debug -->
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>${testng.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.dellroad</groupId>
-            <artifactId>dellroad-stuff-test</artifactId>
-            <version>${dellroad-stuff.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-            <version>${findbugs.version}</version>
-            <scope>provided</scope><!-- not needed at runtime -->
-        </dependency>
-    </dependencies>
+            <!-- Testing & Debug -->
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>${testng.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.dellroad</groupId>
+                <artifactId>dellroad-stuff-test</artifactId>
+                <version>${dellroad-stuff.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>${findbugs.version}</version>
+                <scope>provided</scope><!-- not needed at runtime -->
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <distributionManagement>
         <downloadUrl>https://github.com/archiecobbs/muxable</downloadUrl>
