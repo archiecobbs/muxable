@@ -45,7 +45,6 @@
         <!-- Dependency versions -->
         <dellroad-stuff.version>2.4.6</dellroad-stuff.version>
         <findbugs.version>3.0.2</findbugs.version>
-        <guava.version>30.1-jre</guava.version>
         <log4j.version>1.2.17</log4j.version>
         <permazen.version>4.1.7</permazen.version>
         <slf4j.version>1.7.30</slf4j.version>
@@ -98,11 +97,6 @@
         </dependency>
 
         <!-- Misc utility -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
         <dependency>
             <groupId>io.permazen</groupId>
             <artifactId>permazen-util</artifactId>
