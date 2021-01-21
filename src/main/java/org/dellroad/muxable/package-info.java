@@ -4,7 +4,7 @@
  */
 
 /**
- * Java library for multiplexing multiple ByteChannels over an underlying ByteChannel.
+ * A Java library for multiplexing multiple byte-oriented channels over a single parent channel.
  *
  * @see <a href="https://github.com/archiecobbs/muxable">Muxable</a>
  */

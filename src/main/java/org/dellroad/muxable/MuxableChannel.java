@@ -6,8 +6,9 @@
 package org.dellroad.muxable;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.channels.Channel;
-import java.nio.channels.ClosedChannelException;
+import java.nio.channels.Selector;
 import java.util.concurrent.BlockingQueue;
 
 /**
@@ -28,16 +29,16 @@ import java.util.concurrent.BlockingQueue;
  * <p>
  * Implementations may use varying strategies for multiplexing the nested channels over the underlying "real" channel, and
  * this may have subtle effects on behavior. For example, with implementations that multiplex over a single underlying TCP
- * stream, there may be situations where reading from nested channel A will block unless and until data is read from a sibling
- * nested channel B, etc. Nested channel blocking may also occur if the {@link BlockingQueue} returned by
- * {@link #getNestedChannelRequests} reaches its internal buffer capacity, etc. Any such restrictions or limitations
- * should be documented by the implementation.
+ * stream, there may be situations where, after certain internal buffer limits are reached, further attempts to read from
+ * nested channel A will block unless and until more data is read from a sibling nested channel B, etc. Nested channels
+ * might also block if the {@link BlockingQueue} returned by {@link #getNestedChannelRequests} reaches its internal buffer
+ * capacity, etc. In any case, such restrictions or limitations should be clearly documented by the implementation.
  *
  * <p>
- * However, all implementations must avoid complete deadlock; more precisely: if, for every nested input channel
+ * However, all implementations must avoid "senseless deadlock"; more precisely: if, for every nested input channel
  * along with the {@link BlockingQueue} returned by {@link #getNestedChannelRequests}, there exists some {@link Thread}
- * currently polling for data, and there is any data is available, then at least one of those threads must immediately
- * awaken and return something.
+ * or {@link Selector} currently polling for data, and there is any data is available, then at least one must become
+ * readable and provide new data.
  */
 public interface MuxableChannel extends Channel {
 
@@ -47,36 +48,31 @@ public interface MuxableChannel extends Channel {
      * <p>
      * The remote side will be notified by the appearance of a corresponding {@link NestedChannelRequest} in the
      * queue returned by {@link #getNestedChannelRequests} (with the input and output channels reversed, of course).
-     * The delivery of requests on the remote side is guaranteed to preserve order.
-     *
-     * <p>
-     * Note that it's possible to send a {@link NestedChannelRequest} but create neither input nor output channels.
-     * This can be leveraged to send other control plane messages, etc.
+     * The delivery of requests on the remote side is guaranteed to preserve order (but only to the extent order
+     * is well-defined on the sending side, i.e., there is a "happens before" relationship).
      *
      * @param requestData data to supply to the remote side (via {@link NestedChannelRequest#getRequestData})
-     * @param input true to include an input channel, false to include only an output channel
-     * @param output true to include an output channel, false to include only an input channel
+     * @param directions which of input and/or output to create
      * @return the newly created nested channel(s)
      * @throws IOException if an I/O error occurs
-     * @throws ClosedChannelException if this instance is closed
-     * @throws IllegalArgumentException if {@code requestData} is null
+     * @throws IllegalArgumentException if either parameter is null
      */
-    NestedChannelRequest newNestedChannelRequest(byte[] requestData, boolean input, boolean output) throws IOException;
+    NestedChannelRequest newNestedChannelRequest(ByteBuffer requestData, Directions directions) throws IOException;
 
     /**
      * Create a pair of nested input and output channels scoped to this instance.
      *
      * <p>
-     * Equivalent to: {@link #newNestedChannelRequest(byte[], boolean, boolean) newNestedChannelRequest(requestData, true,true)}.
+     * Equivalent to: {@link #newNestedChannelRequest(ByteBuffer, Directions)
+     *  newNestedChannelRequest(requestData, Directions.BIDIRECTIONAL)}.
      *
      * @param requestData data to supply to the remote side (via {@link NestedChannelRequest#getRequestData})
      * @return the newly created nested channel(s)
      * @throws IOException if an I/O error occurs
-     * @throws ClosedChannelException if this instance is closed
      * @throws IllegalArgumentException if {@code requestData} is null
      */
-    default NestedChannelRequest newNestedChannelRequest(byte[] requestData) throws IOException {
-        return this.newNestedChannelRequest(requestData, true, true);
+    default NestedChannelRequest newNestedChannelRequest(ByteBuffer requestData) throws IOException {
+        return this.newNestedChannelRequest(requestData, Directions.BIDIRECTIONAL);
     }
 
     /**

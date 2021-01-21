@@ -5,9 +5,11 @@
 
 package org.dellroad.muxable;
 
+import java.nio.ByteBuffer;
 import java.nio.channels.InterruptibleChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
+import java.nio.channels.spi.SelectorProvider;
 
 /**
  * Represents nested channel(s) newly created by the remote side.
@@ -31,13 +33,17 @@ public interface NestedChannelRequest {
      * @return the request data provided by the remote side via
      * {@link MuxableChannel#newNestedChannelRequest MuxableChannel.newNestedChannelRequest()}.
      */
-    byte[] getRequestData();
+    ByteBuffer getRequestData();
 
     /**
      * Get the input channel, if any. This corresponds to the output channel on the remote side.
      *
      * <p>
      * The returned channel will typically also implement {@link InterruptibleChannel}, but that is implementation-dependent.
+     *
+     * <p>
+     * It's possible that the returned channel requires a non-default {@link SelectorProvider} provider; if so, that must be
+     * documented by the implementation.
      *
      * <p>
      * In some implementations, {@link #getInput} and {@link #getOutput} may return the same channel; this is explicitly permitted.
@@ -51,6 +57,10 @@ public interface NestedChannelRequest {
      *
      * <p>
      * The returned channel will typically also implement {@link InterruptibleChannel}, but that is implementation-dependent.
+     *
+     * <p>
+     * It's possible that the returned channel requires a non-default {@link SelectorProvider} provider; if so, that must be
+     * documented by the implementation.
      *
      * <p>
      * In some implementations, {@link #getInput} and {@link #getOutput} may return the same channel; this is explicitly permitted.
