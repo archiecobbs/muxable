@@ -143,7 +143,7 @@ var activeTableTab = "activeTableTab";
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>byte[]</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getRequestData--">getRequestData</a></span>()</code>
 <div class="block">Get the request data associated with this request.</div>
 </td>
@@ -183,12 +183,12 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getRequestData</h4>
-<pre>byte[]&nbsp;getRequestData()</pre>
+<pre><a href="https://docs.oracle.com/javase/8/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;getRequestData()</pre>
 <div class="block">Get the request data associated with this request.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the request data provided by the remote side via
- <a href="../../../org/dellroad/muxable/MuxableChannel.html#newNestedChannelRequest-byte:A-boolean-boolean-"><code>MuxableChannel.newNestedChannelRequest()</code></a>.</dd>
+ <a href="../../../org/dellroad/muxable/MuxableChannel.html#newNestedChannelRequest-java.nio.ByteBuffer-org.dellroad.muxable.Directions-"><code>MuxableChannel.newNestedChannelRequest()</code></a>.</dd>
 </dl>
 </li>
 </ul>
@@ -203,6 +203,10 @@ var activeTableTab = "activeTableTab";
 
  <p>
  The returned channel will typically also implement <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/InterruptibleChannel.html?is-external=true" title="class or interface in java.nio.channels"><code>InterruptibleChannel</code></a>, but that is implementation-dependent.
+
+ <p>
+ It's possible that the returned channel requires a non-default <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/spi/SelectorProvider.html?is-external=true" title="class or interface in java.nio.channels.spi"><code>SelectorProvider</code></a> provider; if so, that must be
+ documented by the implementation.
 
  <p>
  In some implementations, <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getInput--"><code>getInput()</code></a> and <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getOutput--"><code>getOutput()</code></a> may return the same channel; this is explicitly permitted.</div>
@@ -223,6 +227,10 @@ var activeTableTab = "activeTableTab";
 
  <p>
  The returned channel will typically also implement <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/InterruptibleChannel.html?is-external=true" title="class or interface in java.nio.channels"><code>InterruptibleChannel</code></a>, but that is implementation-dependent.
+
+ <p>
+ It's possible that the returned channel requires a non-default <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/spi/SelectorProvider.html?is-external=true" title="class or interface in java.nio.channels.spi"><code>SelectorProvider</code></a> provider; if so, that must be
+ documented by the implementation.
 
  <p>
  In some implementations, <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getInput--"><code>getInput()</code></a> and <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getOutput--"><code>getOutput()</code></a> may return the same channel; this is explicitly permitted.</div>

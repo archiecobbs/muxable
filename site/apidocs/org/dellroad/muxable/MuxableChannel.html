@@ -48,7 +48,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li>Prev&nbsp;Class</li>
+<li><a href="../../../org/dellroad/muxable/Directions.html" title="enum in org.dellroad.muxable"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../org/dellroad/muxable/NestedChannelRequest.html" title="interface in org.dellroad.muxable"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -123,16 +123,16 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/Cha
  <p>
  Implementations may use varying strategies for multiplexing the nested channels over the underlying "real" channel, and
  this may have subtle effects on behavior. For example, with implementations that multiplex over a single underlying TCP
- stream, there may be situations where reading from nested channel A will block unless and until data is read from a sibling
- nested channel B, etc. Nested channel blocking may also occur if the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/BlockingQueue.html?is-external=true" title="class or interface in java.util.concurrent"><code>BlockingQueue</code></a> returned by
- <a href="../../../org/dellroad/muxable/MuxableChannel.html#getNestedChannelRequests--"><code>getNestedChannelRequests()</code></a> reaches its internal buffer capacity, etc. Any such restrictions or limitations
- should be documented by the implementation.
+ stream, there may be situations where, after certain internal buffer limits are reached, further attempts to read from
+ nested channel A will block unless and until more data is read from a sibling nested channel B, etc. Nested channels
+ might also block if the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/BlockingQueue.html?is-external=true" title="class or interface in java.util.concurrent"><code>BlockingQueue</code></a> returned by <a href="../../../org/dellroad/muxable/MuxableChannel.html#getNestedChannelRequests--"><code>getNestedChannelRequests()</code></a> reaches its internal buffer
+ capacity, etc. In any case, such restrictions or limitations should be clearly documented by the implementation.
 
  <p>
- However, all implementations must avoid complete deadlock; more precisely: if, for every nested input channel
+ However, all implementations must avoid "senseless deadlock"; more precisely: if, for every nested input channel
  along with the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/BlockingQueue.html?is-external=true" title="class or interface in java.util.concurrent"><code>BlockingQueue</code></a> returned by <a href="../../../org/dellroad/muxable/MuxableChannel.html#getNestedChannelRequests--"><code>getNestedChannelRequests()</code></a>, there exists some <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html?is-external=true" title="class or interface in java.lang"><code>Thread</code></a>
- currently polling for data, and there is any data is available, then at least one of those threads must immediately
- awaken and return something.</div>
+ or <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/Selector.html?is-external=true" title="class or interface in java.nio.channels"><code>Selector</code></a> currently polling for data, and there is any data is available, then at least one must become
+ readable and provide new data.</div>
 </li>
 </ul>
 </div>
@@ -165,15 +165,14 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/Cha
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>default <a href="../../../org/dellroad/muxable/NestedChannelRequest.html" title="interface in org.dellroad.muxable">NestedChannelRequest</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../org/dellroad/muxable/MuxableChannel.html#newNestedChannelRequest-byte:A-">newNestedChannelRequest</a></span>(byte[]&nbsp;requestData)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../org/dellroad/muxable/MuxableChannel.html#newNestedChannelRequest-java.nio.ByteBuffer-">newNestedChannelRequest</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;requestData)</code>
 <div class="block">Create a pair of nested input and output channels scoped to this instance.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../org/dellroad/muxable/NestedChannelRequest.html" title="interface in org.dellroad.muxable">NestedChannelRequest</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../org/dellroad/muxable/MuxableChannel.html#newNestedChannelRequest-byte:A-boolean-boolean-">newNestedChannelRequest</a></span>(byte[]&nbsp;requestData,
-                       boolean&nbsp;input,
-                       boolean&nbsp;output)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../org/dellroad/muxable/MuxableChannel.html#newNestedChannelRequest-java.nio.ByteBuffer-org.dellroad.muxable.Directions-">newNestedChannelRequest</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;requestData,
+                       <a href="../../../org/dellroad/muxable/Directions.html" title="enum in org.dellroad.muxable">Directions</a>&nbsp;directions)</code>
 <div class="block">Create a new nested channel, or pair of nested channels, scoped to this instance.</div>
 </td>
 </tr>
@@ -199,52 +198,46 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/Cha
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="newNestedChannelRequest-byte:A-boolean-boolean-">
+<a name="newNestedChannelRequest-java.nio.ByteBuffer-org.dellroad.muxable.Directions-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>newNestedChannelRequest</h4>
-<pre><a href="../../../org/dellroad/muxable/NestedChannelRequest.html" title="interface in org.dellroad.muxable">NestedChannelRequest</a>&nbsp;newNestedChannelRequest(byte[]&nbsp;requestData,
-                                             boolean&nbsp;input,
-                                             boolean&nbsp;output)
+<pre><a href="../../../org/dellroad/muxable/NestedChannelRequest.html" title="interface in org.dellroad.muxable">NestedChannelRequest</a>&nbsp;newNestedChannelRequest(<a href="https://docs.oracle.com/javase/8/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;requestData,
+                                             <a href="../../../org/dellroad/muxable/Directions.html" title="enum in org.dellroad.muxable">Directions</a>&nbsp;directions)
                                       throws <a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <div class="block">Create a new nested channel, or pair of nested channels, scoped to this instance.
 
  <p>
  The remote side will be notified by the appearance of a corresponding <a href="../../../org/dellroad/muxable/NestedChannelRequest.html" title="interface in org.dellroad.muxable"><code>NestedChannelRequest</code></a> in the
  queue returned by <a href="../../../org/dellroad/muxable/MuxableChannel.html#getNestedChannelRequests--"><code>getNestedChannelRequests()</code></a> (with the input and output channels reversed, of course).
- The delivery of requests on the remote side is guaranteed to preserve order.
-
- <p>
- Note that it's possible to send a <a href="../../../org/dellroad/muxable/NestedChannelRequest.html" title="interface in org.dellroad.muxable"><code>NestedChannelRequest</code></a> but create neither input nor output channels.
- This can be leveraged to send other control plane messages, etc.</div>
+ The delivery of requests on the remote side is guaranteed to preserve order (but only to the extent order
+ is well-defined on the sending side, i.e., there is a "happens before" relationship).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>requestData</code> - data to supply to the remote side (via <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getRequestData--"><code>NestedChannelRequest.getRequestData()</code></a>)</dd>
-<dd><code>input</code> - true to include an input channel, false to include only an output channel</dd>
-<dd><code>output</code> - true to include an output channel, false to include only an input channel</dd>
+<dd><code>directions</code> - which of input and/or output to create</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the newly created nested channel(s)</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - if an I/O error occurs</dd>
-<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/ClosedChannelException.html?is-external=true" title="class or interface in java.nio.channels">ClosedChannelException</a></code> - if this instance is closed</dd>
-<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - if <code>requestData</code> is null</dd>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - if either parameter is null</dd>
 </dl>
 </li>
 </ul>
-<a name="newNestedChannelRequest-byte:A-">
+<a name="newNestedChannelRequest-java.nio.ByteBuffer-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>newNestedChannelRequest</h4>
-<pre>default&nbsp;<a href="../../../org/dellroad/muxable/NestedChannelRequest.html" title="interface in org.dellroad.muxable">NestedChannelRequest</a>&nbsp;newNestedChannelRequest(byte[]&nbsp;requestData)
+<pre>default&nbsp;<a href="../../../org/dellroad/muxable/NestedChannelRequest.html" title="interface in org.dellroad.muxable">NestedChannelRequest</a>&nbsp;newNestedChannelRequest(<a href="https://docs.oracle.com/javase/8/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;requestData)
                                               throws <a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <div class="block">Create a pair of nested input and output channels scoped to this instance.
 
  <p>
- Equivalent to: <a href="../../../org/dellroad/muxable/MuxableChannel.html#newNestedChannelRequest-byte:A-boolean-boolean-"><code>newNestedChannelRequest(requestData, true,true)</code></a>.</div>
+ Equivalent to: <a href="../../../org/dellroad/muxable/MuxableChannel.html#newNestedChannelRequest-java.nio.ByteBuffer-org.dellroad.muxable.Directions-"><code>newNestedChannelRequest(requestData, Directions.BIDIRECTIONAL)</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>requestData</code> - data to supply to the remote side (via <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getRequestData--"><code>NestedChannelRequest.getRequestData()</code></a>)</dd>
@@ -252,7 +245,6 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/Cha
 <dd>the newly created nested channel(s)</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - if an I/O error occurs</dd>
-<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/ClosedChannelException.html?is-external=true" title="class or interface in java.nio.channels">ClosedChannelException</a></code> - if this instance is closed</dd>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - if <code>requestData</code> is null</dd>
 </dl>
 </li>
@@ -268,7 +260,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/Cha
 
  <p>
  Each <a href="../../../org/dellroad/muxable/NestedChannelRequest.html" title="interface in org.dellroad.muxable"><code>NestedChannelRequest</code></a> corresponds to a remote invocation of
- <a href="../../../org/dellroad/muxable/MuxableChannel.html#newNestedChannelRequest-byte:A-boolean-boolean-"><code>newNestedChannelRequest()</code></a>. Moreover, the order of requests is preserved.
+ <a href="../../../org/dellroad/muxable/MuxableChannel.html#newNestedChannelRequest-java.nio.ByteBuffer-org.dellroad.muxable.Directions-"><code>newNestedChannelRequest()</code></a>. Moreover, the order of requests is preserved.
 
  <p>
  Note: no special change happens to the returned <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/BlockingQueue.html?is-external=true" title="class or interface in java.util.concurrent"><code>BlockingQueue</code></a> once this instance is closed;
@@ -331,7 +323,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/Cha
 </div>
 <div class="subNav">
 <ul class="navList">
-<li>Prev&nbsp;Class</li>
+<li><a href="../../../org/dellroad/muxable/Directions.html" title="enum in org.dellroad.muxable"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../org/dellroad/muxable/NestedChannelRequest.html" title="interface in org.dellroad.muxable"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
