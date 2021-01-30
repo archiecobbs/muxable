@@ -46,11 +46,11 @@ public class ProtocolWriter {
      * Open a new local nested channel.
      *
      * <p>
-     * Any generated output will delivered to the configured {@link OutputHandler} synchronously (in the current thread).
-     * However, this method must not be invoked re-entrantly.
+     * Because the channel was created by the local side, the returned channel ID will always be positive.
      *
      * <p>
-     * Because the channel was created by the local side, {@code channelId} will always be non-negative.
+     * Any generated output will delivered to the configured {@link OutputHandler} synchronously (in the current thread).
+     * However, this method must not be invoked re-entrantly.
      *
      * @param requestData the request data to send to the remote side
      * @param directions which I/O direction(s) are being established (from the local point of view)
@@ -88,6 +88,10 @@ public class ProtocolWriter {
      * due to race conditions between the local side writing and the remote side closing); if so, no data is actually
      * sent and this method returns false.
      *
+     * <p>
+     * Any generated output will delivered to the configured {@link OutputHandler} synchronously (in the current thread).
+     * However, this method must not be invoked re-entrantly.
+     *
      * @param channelId encoded channel ID (positive for local channels, negative for remote channels)
      * @param data the data to send
      * @return true if data was framed and written to the {@link OutputHandler}, false if the channel has already been closed
@@ -120,10 +124,11 @@ public class ProtocolWriter {
      * Close an open nested channel.
      *
      * <p>
-     * This sends a "close connection" frame to the peer.
+     * This sends a "close connection" frame to the peer, unless the peer already knows that the channel is closed.
      *
      * <p>
-     * The specified channel must not yet have been {@linkplain #closeNestedChannel closed}.
+     * Any generated output will delivered to the configured {@link OutputHandler} synchronously (in the current thread).
+     * However, this method must not be invoked re-entrantly.
      *
      * @param channelId encoded channel ID (positive for local channels, negative for remote channels)
      * @throws IOException if thrown by the {@link OutputHandler}
@@ -151,6 +156,10 @@ public class ProtocolWriter {
      *
      * <p>
      * This implicitly closes all nested channels on the remote side.
+     *
+     * <p>
+     * Generated output will delivered to the configured {@link OutputHandler} synchronously (in the current thread).
+     * However, this method must not be invoked re-entrantly.
      *
      * @throws IOException if thrown by the {@link OutputHandler}
      * @throws IllegalStateException if this method is invoked re-entrantly by the {@link OutputHandler}

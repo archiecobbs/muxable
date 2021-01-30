@@ -29,22 +29,22 @@ import org.dellroad.stuff.util.LongMap;
  * {@link ByteChannel} (or {@link ReadableByteChannel}, {@link WritableByteChannel} pair) using a simple framing scheme.
  *
  * <p>
- * However, the nested channel data and {@link NestedChannelRequest}s do all share the same underlying "real" channel,
- * so any one left unread for too long can block all the others. This implementation only guarantees that "senseless"
- * deadlock won't happen (see {@link MuxableChannel}).
+ * The nested channel data and {@link NestedChannelRequest}s share the same underlying "real" channel,
+ * so any one left unread for too long can block all the others. This implementation only guarantees that
+ * "senseless" deadlock won't happen (see {@link MuxableChannel}).
  *
  * <p>
  * <b>Java NIO</b>
  *
  * <p>
  * This is a Java NIO based implementation. The underlying channel(s) must be {@link SelectableChannel}s
- * and use the default {@link SelectorProvider}. The nested channels returned by this class will also
- * use the default {@link SelectorProvider}.
+ * and (for now) use the default {@link SelectorProvider}. The nested channels returned by this class will
+ * use same {@link SelectorProvider} as the underlying channel(s).
  *
  * <p>
  * Because an internal service thread is created, instances must be explicitly {@link #start}'d before use
  * and {@link #stop}'d when no longer needed. When this instance is {@link #stop}'d, the underlying
- * {@link ByteChannel}(s) are closed.
+ * channel(s) are closed.
  *
  * <p>
  * Invoking {@link #close} on this instance has the same effect as invoking {@link #stop}.

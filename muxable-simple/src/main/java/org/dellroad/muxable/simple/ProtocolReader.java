@@ -78,7 +78,7 @@ public class ProtocolReader {
      *
      * <p>
      * This method consumes all of {@code data}, unless a "close connection" frame is read; in that case, any data
-     * after the "close connection" frame will remain in {@code data}, this method returns false, and subsequent
+     * after the "close connection" frame will remain in {@code data}, this method will return false, and any subsequent
      * invocations of this method will throw {@link IllegalStateException}.
      *
      * @param data new data received
