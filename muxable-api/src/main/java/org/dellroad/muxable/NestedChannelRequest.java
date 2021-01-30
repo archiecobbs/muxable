@@ -42,8 +42,9 @@ public interface NestedChannelRequest {
      * The returned channel will typically also implement {@link InterruptibleChannel}, but that is implementation-dependent.
      *
      * <p>
-     * It's possible that the returned channel requires a non-default {@link SelectorProvider} provider; if so, that must be
-     * documented by the implementation.
+     * It's possible that the returned channel requires a non-default {@link SelectorProvider}; if so, that must be
+     * documented by the implementation. Unless specified otherwise, the default {@link SelectorProvider} may be assumed.
+     * In any case, the channels returned by {@link #getInput} and {@link #getOutput} must share the same {@link SelectorProvider}.
      *
      * <p>
      * In some implementations, {@link #getInput} and {@link #getOutput} may return the same channel; this is explicitly permitted.
@@ -59,8 +60,9 @@ public interface NestedChannelRequest {
      * The returned channel will typically also implement {@link InterruptibleChannel}, but that is implementation-dependent.
      *
      * <p>
-     * It's possible that the returned channel requires a non-default {@link SelectorProvider} provider; if so, that must be
-     * documented by the implementation.
+     * It's possible that the returned channel requires a non-default {@link SelectorProvider}; if so, that must be
+     * documented by the implementation. Unless specified otherwise, the default {@link SelectorProvider} may be assumed.
+     * In any case, the channels returned by {@link #getInput} and {@link #getOutput} must share the same {@link SelectorProvider}.
      *
      * <p>
      * In some implementations, {@link #getInput} and {@link #getOutput} may return the same channel; this is explicitly permitted.
