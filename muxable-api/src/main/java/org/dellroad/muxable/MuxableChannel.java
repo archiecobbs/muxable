@@ -87,6 +87,11 @@ public interface MuxableChannel extends Channel {
      * {@link #newNestedChannelRequest newNestedChannelRequest()}. Moreover, the order of requests is preserved.
      *
      * <p>
+     * Because the remote side can close a nested channel at any time, it is possible that a {@link NestedChannelRequest}
+     * is already closed by the time it's pulled from this queue. In this case, the input and output channels
+     * will throw {@link IOException} on first access.
+     *
+     * <p>
      * Note: no special change happens to the returned {@link BlockingQueue} once this instance is closed;
      * instead, new reqeusts simply stop appearing. Therefore, after closing this instance, any thread(s)
      * that are blocked polling for new data may need to be woken up via {@link Thread#interrupt}.
