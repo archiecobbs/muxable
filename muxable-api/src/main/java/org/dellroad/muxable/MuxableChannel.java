@@ -20,6 +20,10 @@ import java.util.concurrent.BlockingQueue;
  * if a nested channel is closed, only that nested channel is affected, and its parent and siblings are unaffected.
  *
  * <p>
+ * Nested channels are bidirectional. Unlike TCP sockets, they do not support shutting down only one direction.
+ * Closing either input or output channel results in both channels being closed.
+ *
+ * <p>
  * Any exception implies brokenness: if a {@link MuxableChannel} or any nested channel throws {@link IOException},
  * one should assume it (the channel that threw the exception) is no longer usable and should be closed.
  *
