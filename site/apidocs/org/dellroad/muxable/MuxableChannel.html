@@ -37,7 +37,8 @@ var activeTableTab = "activeTableTab";
 <!--   -->
 </a>
 <ul class="navList" title="Navigation">
-<li><a href="../../../org/dellroad/muxable/package-summary.html">Package</a></li>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
 <li class="navBarCell1Rev">Class</li>
 <li><a href="class-use/MuxableChannel.html">Use</a></li>
 <li><a href="package-tree.html">Tree</a></li>
@@ -102,6 +103,10 @@ var activeTableTab = "activeTableTab";
 <dt>All Superinterfaces:</dt>
 <dd><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/Channel.html?is-external=true" title="class or interface in java.nio.channels">Channel</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a></dd>
 </dl>
+<dl>
+<dt>All Known Implementing Classes:</dt>
+<dd><a href="../../../org/dellroad/muxable/simple/SimpleMuxableChannel.html" title="class in org.dellroad.muxable.simple">SimpleMuxableChannel</a></dd>
+</dl>
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">MuxableChannel</span>
@@ -112,6 +117,10 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/Cha
  The nested "child" channels are byte-oriented and operate independently, and all scoped to the parent <a href="../../../org/dellroad/muxable/MuxableChannel.html" title="interface in org.dellroad.muxable"><code>MuxableChannel</code></a>.
  In other words, if a parent is closed, all of its nested channels are also implicitly closed; on the other hand,
  if a nested channel is closed, only that nested channel is affected, and its parent and siblings are unaffected.
+
+ <p>
+ Nested channels are bidirectional. Unlike TCP sockets, they do not support shutting down only one direction.
+ Closing either input or output channel results in both channels being closed.
 
  <p>
  Any exception implies brokenness: if a <a href="../../../org/dellroad/muxable/MuxableChannel.html" title="interface in org.dellroad.muxable"><code>MuxableChannel</code></a> or any nested channel throws <a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io"><code>IOException</code></a>,
@@ -263,6 +272,11 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/Cha
  <a href="../../../org/dellroad/muxable/MuxableChannel.html#newNestedChannelRequest-java.nio.ByteBuffer-org.dellroad.muxable.Directions-"><code>newNestedChannelRequest()</code></a>. Moreover, the order of requests is preserved.
 
  <p>
+ Because the remote side can close a nested channel at any time, it is possible that a <a href="../../../org/dellroad/muxable/NestedChannelRequest.html" title="interface in org.dellroad.muxable"><code>NestedChannelRequest</code></a>
+ is already closed by the time it's pulled from this queue. In this case, the input and output channels
+ will throw <a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io"><code>IOException</code></a> on first access.
+
+ <p>
  Note: no special change happens to the returned <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/BlockingQueue.html?is-external=true" title="class or interface in java.util.concurrent"><code>BlockingQueue</code></a> once this instance is closed;
  instead, new reqeusts simply stop appearing. Therefore, after closing this instance, any thread(s)
  that are blocked polling for new data may need to be woken up via <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html?is-external=true#interrupt--" title="class or interface in java.lang"><code>Thread.interrupt()</code></a>.</div>
@@ -312,7 +326,8 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/Cha
 <!--   -->
 </a>
 <ul class="navList" title="Navigation">
-<li><a href="../../../org/dellroad/muxable/package-summary.html">Package</a></li>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
 <li class="navBarCell1Rev">Class</li>
 <li><a href="class-use/MuxableChannel.html">Use</a></li>
 <li><a href="package-tree.html">Tree</a></li>

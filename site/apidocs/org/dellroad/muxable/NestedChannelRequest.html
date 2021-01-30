@@ -37,7 +37,8 @@ var activeTableTab = "activeTableTab";
 <!--   -->
 </a>
 <ul class="navList" title="Navigation">
-<li><a href="../../../org/dellroad/muxable/package-summary.html">Package</a></li>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
 <li class="navBarCell1Rev">Class</li>
 <li><a href="class-use/NestedChannelRequest.html">Use</a></li>
 <li><a href="package-tree.html">Tree</a></li>
@@ -98,14 +99,20 @@ var activeTableTab = "activeTableTab";
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>All Known Implementing Classes:</dt>
+<dd><a href="../../../org/dellroad/muxable/simple/SimpleNestedChannelRequest.html" title="class in org.dellroad.muxable.simple">SimpleNestedChannelRequest</a></dd>
+</dl>
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">NestedChannelRequest</span></pre>
-<div class="block">Represents nested channel(s) newly created by the remote side.
+<div class="block">Represents a nested channel within a <a href="../../../org/dellroad/muxable/MuxableChannel.html" title="interface in org.dellroad.muxable"><code>MuxableChannel</code></a>.
 
  <p>
- The <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getInput--">input</a> and <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getOutput--">output</a> channels operate independently:
- for example, closing one does not affect the other.</div>
+ The <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getInput--">input</a> and <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getOutput--">output</a> function independently, but they are
+ considered part of the same connected nested channel. Unlike TCP sockets, they do not support shutting
+ down only one direction: closing either <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getInput--">input</a> or <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getOutput--">output</a>
+ results in both channels being closed.</div>
 </li>
 </ul>
 </div>
@@ -205,8 +212,12 @@ var activeTableTab = "activeTableTab";
  The returned channel will typically also implement <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/InterruptibleChannel.html?is-external=true" title="class or interface in java.nio.channels"><code>InterruptibleChannel</code></a>, but that is implementation-dependent.
 
  <p>
- It's possible that the returned channel requires a non-default <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/spi/SelectorProvider.html?is-external=true" title="class or interface in java.nio.channels.spi"><code>SelectorProvider</code></a> provider; if so, that must be
- documented by the implementation.
+ It's possible that the returned channel requires a non-default <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/spi/SelectorProvider.html?is-external=true" title="class or interface in java.nio.channels.spi"><code>SelectorProvider</code></a>; if so, that must be
+ documented by the implementation. Unless specified otherwise, the default <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/spi/SelectorProvider.html?is-external=true" title="class or interface in java.nio.channels.spi"><code>SelectorProvider</code></a> may be assumed.
+ In any case, the channels returned by <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getInput--"><code>getInput()</code></a> and <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getOutput--"><code>getOutput()</code></a> must share the same <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/spi/SelectorProvider.html?is-external=true" title="class or interface in java.nio.channels.spi"><code>SelectorProvider</code></a>.
+
+ <p>
+ Closing this channel also closes the channel returned by <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getOutput--"><code>getOutput()</code></a>.
 
  <p>
  In some implementations, <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getInput--"><code>getInput()</code></a> and <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getOutput--"><code>getOutput()</code></a> may return the same channel; this is explicitly permitted.</div>
@@ -229,8 +240,12 @@ var activeTableTab = "activeTableTab";
  The returned channel will typically also implement <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/InterruptibleChannel.html?is-external=true" title="class or interface in java.nio.channels"><code>InterruptibleChannel</code></a>, but that is implementation-dependent.
 
  <p>
- It's possible that the returned channel requires a non-default <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/spi/SelectorProvider.html?is-external=true" title="class or interface in java.nio.channels.spi"><code>SelectorProvider</code></a> provider; if so, that must be
- documented by the implementation.
+ It's possible that the returned channel requires a non-default <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/spi/SelectorProvider.html?is-external=true" title="class or interface in java.nio.channels.spi"><code>SelectorProvider</code></a>; if so, that must be
+ documented by the implementation. Unless specified otherwise, the default <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/spi/SelectorProvider.html?is-external=true" title="class or interface in java.nio.channels.spi"><code>SelectorProvider</code></a> may be assumed.
+ In any case, the channels returned by <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getInput--"><code>getInput()</code></a> and <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getOutput--"><code>getOutput()</code></a> must share the same <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/spi/SelectorProvider.html?is-external=true" title="class or interface in java.nio.channels.spi"><code>SelectorProvider</code></a>.
+
+ <p>
+ Closing this channel also closes the channel returned by <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getInput--"><code>getInput()</code></a>.
 
  <p>
  In some implementations, <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getInput--"><code>getInput()</code></a> and <a href="../../../org/dellroad/muxable/NestedChannelRequest.html#getOutput--"><code>getOutput()</code></a> may return the same channel; this is explicitly permitted.</div>
@@ -256,7 +271,8 @@ var activeTableTab = "activeTableTab";
 <!--   -->
 </a>
 <ul class="navList" title="Navigation">
-<li><a href="../../../org/dellroad/muxable/package-summary.html">Package</a></li>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
 <li class="navBarCell1Rev">Class</li>
 <li><a href="class-use/NestedChannelRequest.html">Use</a></li>
 <li><a href="package-tree.html">Tree</a></li>
