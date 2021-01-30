@@ -1,0 +1,7 @@
+<FindBugsFilter>
+    <Match>
+        <Class name="org.dellroad.muxable.simple.ProtocolWriter"/>
+        <Method name="sendData"/>
+        <Bug pattern="SF_SWITCH_FALLTHROUGH"/>
+    </Match>
+</FindBugsFilter>

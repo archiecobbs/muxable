@@ -14,6 +14,7 @@
     <url>https://github.com/archiecobbs/muxable</url>
     <modules>
         <module>muxable-api</module>
+        <module>muxable-simple</module>
     </modules>
     <licenses>
         <license>
@@ -92,6 +93,13 @@
 
     <dependencyManagement>
         <dependencies>
+
+            <!-- Siblings -->
+            <dependency>
+                <groupId>org.dellroad</groupId>
+                <artifactId>muxable-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- Logging -->
             <dependency>
