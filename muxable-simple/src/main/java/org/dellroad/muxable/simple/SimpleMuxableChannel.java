@@ -226,18 +226,18 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
 
 // ProtocolReader.InputHandler
 
-    public void nestedChannelRequest(long channelId, ByteBuffer requestData, Directions directions) throws IOException {
+    private void nestedChannelRequest(long channelId, ByteBuffer requestData, Directions directions) throws IOException {
         this.requests.add(this.newNestedChannel(channelId, requestData, directions));
     }
 
-    public void nestedChannelData(long channelId, ByteBuffer data) {
+    private void nestedChannelData(long channelId, ByteBuffer data) {
         final NestedOutputChannelInfo nestedOutput = this.nestedOutputMap.get(channelId);
         if (nestedOutput == null)
             return;                                 // remote must have sent the data before it knew we closed the channel
         nestedOutput.enqueue(data);
     }
 
-    public void nestedChannelClosed(long channelId) {
+    private void nestedChannelClosed(long channelId) {
         this.closeNestedChannel(channelId);
     }
 
