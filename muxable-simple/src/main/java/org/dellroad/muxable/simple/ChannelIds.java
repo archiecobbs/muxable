@@ -29,6 +29,30 @@ public class ChannelIds {
     private long prevRemoteChannelId;                               // the previous remote channel ID allocated
 
     /**
+     * Get the next available local channel ID.
+     *
+     * @return next local channel ID
+     * @throws IllegalStateException if all 2<sup>63</sup> local channel ID's have already been allocated
+     */
+    public synchronized long getNextLocalChannelId() {
+        if (this.prevLocalChannelId == Long.MAX_VALUE)
+            throw new IllegalStateException("channel ID's exhausted");
+        return this.prevLocalChannelId + 1;
+    }
+
+    /**
+     * Get the next available remote channel ID.
+     *
+     * @return next remove channel ID
+     * @throws IllegalStateException if all 2<sup>63</sup> remote channel ID's have already been allocated
+     */
+    public synchronized long getNextRemoteChannelId() {
+        if (this.prevRemoteChannelId == Long.MAX_VALUE)
+            throw new IllegalStateException("channel ID's exhausted");
+        return this.prevRemoteChannelId + 1;
+    }
+
+    /**
      * Allocate a new local channel ID.
      *
      * @return new local channel ID (always positive)
