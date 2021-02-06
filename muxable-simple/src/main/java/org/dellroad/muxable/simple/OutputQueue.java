@@ -10,6 +10,8 @@ import java.nio.ByteBuffer;
 import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * A output queue of bytes stored in {@link ByteBuffer}s.
@@ -38,6 +40,24 @@ public class OutputQueue {
      * Flag bit in the flags returned by {@link #enqueue enqueue()} and {@link #writeTo writeTo()}.
      */
     public static final int WAS_FULL = 0x08;
+
+    // Pre-calculate flags description strings
+    private static final String[] FLAGS_DESCRIPTIONS = new String[16];
+    static {
+        FLAGS_DESCRIPTIONS[0] = "NOFLAGS";
+        for (int flags = 1; flags < 16; flags++) {
+            final ArrayList<String> flagNames = new ArrayList<>(4);
+            if ((flags & WAS_EMPTY) != 0)
+                flagNames.add("WAS_EMPTY");
+            if ((flags & NOW_EMPTY) != 0)
+                flagNames.add("NOW_EMPTY");
+            if ((flags & WAS_FULL) != 0)
+                flagNames.add("WAS_FULL");
+            if ((flags & NOW_FULL) != 0)
+                flagNames.add("NOW_FULL");
+            FLAGS_DESCRIPTIONS[flags] = flagNames.stream().collect(Collectors.joining(","));
+        }
+    }
 
     private final ArrayDeque<ByteBuffer> queue = new ArrayDeque<>();
     private final long fullMark;
@@ -155,6 +175,16 @@ public class OutputQueue {
 
         // Done
         return flags | this.readNowFlags();
+    }
+
+    /**
+     * Return a debug description of the given flags.
+     *
+     * @param flags flag bits
+     * @return debug description
+     */
+    public static String describeFlags(int flags) {
+        return FLAGS_DESCRIPTIONS[flags & (NOW_EMPTY | NOW_FULL | WAS_EMPTY | WAS_FULL)];
     }
 
     private int readWasFlags() {
