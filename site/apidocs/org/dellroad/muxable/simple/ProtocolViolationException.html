@@ -135,7 +135,10 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <span class="typeNameLabel">ProtocolViolationException</span>
 extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></pre>
-<div class="block">Exception thrown when a <a href="../../../../org/dellroad/muxable/simple/SimpleMuxableChannel.html" title="class in org.dellroad.muxable.simple"><code>SimpleMuxableChannel</code></a> framing protocol violation is detected.</div>
+<div class="block">Exception thrown when a <a href="../../../../org/dellroad/muxable/simple/SimpleMuxableChannel.html" title="class in org.dellroad.muxable.simple"><code>SimpleMuxableChannel</code></a> framing protocol violation is detected.
+
+ <p>
+ This should never occur unless the remote side violating the framing protocol (i.e., has a bug).</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../serialized-form.html#org.dellroad.muxable.simple.ProtocolViolationException">Serialized Form</a></dd>

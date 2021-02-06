@@ -122,12 +122,41 @@ var activeTableTab = "activeTableTab";
 extends <a href="https://archiecobbs.github.io/dellroad-stuff/site/apidocs/org/dellroad/stuff/net/SelectorSupport.html?is-external=true" title="class or interface in org.dellroad.stuff.net">SelectorSupport</a>
 implements <a href="../../../../org/dellroad/muxable/MuxableChannel.html" title="interface in org.dellroad.muxable">MuxableChannel</a></pre>
 <div class="block">An implementation of the <a href="../../../../org/dellroad/muxable/MuxableChannel.html" title="interface in org.dellroad.muxable"><code>MuxableChannel</code></a> interface that multiplexes nested channels over a single underlying
- <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/ByteChannel.html?is-external=true" title="class or interface in java.nio.channels"><code>ByteChannel</code></a> (or <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/ReadableByteChannel.html?is-external=true" title="class or interface in java.nio.channels"><code>ReadableByteChannel</code></a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/WritableByteChannel.html?is-external=true" title="class or interface in java.nio.channels"><code>WritableByteChannel</code></a> pair) using a simple framing scheme.
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/ByteChannel.html?is-external=true" title="class or interface in java.nio.channels"><code>ByteChannel</code></a> (or <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/ReadableByteChannel.html?is-external=true" title="class or interface in java.nio.channels"><code>ReadableByteChannel</code></a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/WritableByteChannel.html?is-external=true" title="class or interface in java.nio.channels"><code>WritableByteChannel</code></a> pair) using a simple framing protocol.
 
  <p>
  The nested channel data and <a href="../../../../org/dellroad/muxable/NestedChannelRequest.html" title="interface in org.dellroad.muxable"><code>NestedChannelRequest</code></a>s share the same underlying "real" channel,
  so any one left unread for too long can block all the others. This implementation only guarantees that
  "senseless" deadlock won't happen (see <a href="../../../../org/dellroad/muxable/MuxableChannel.html" title="interface in org.dellroad.muxable"><code>MuxableChannel</code></a>).
+
+ <p>
+ <b>Protocol Description</b>
+
+ <p>
+ After the initial connection, each side transmits a <a href="../../../../org/dellroad/muxable/simple/ProtocolConstants.html#PROTOCOL_COOKIE">protocol cookie</a>
+ followed its <a href="../../../../org/dellroad/muxable/simple/ProtocolConstants.html#CURRENT_PROTOCOL_VERSION">current protocol version</a>. Once so established,
+ the protocol simply consists of <b>frames</b> being sent back and forth. A frame consists of a <b>channel ID</b>,
+ a <b>payload length</b>, and finally the <b>payload content</b>. The channel ID and length values are encoded
+ via <a href="http://permazen.github.io/permazen/site/apidocs/io/permazen/util/LongEncoder.html?is-external=true" title="class or interface in io.permazen.util"><code>LongEncoder</code></a>.
+
+ <p>
+ The channel ID is negated by the sender for channels created by the receiver; this way, the receiver can differentiate
+ a local channel ID (negative) from a remote channel ID (positive). A channel ID of zero means to immediately close
+ the entire connection.
+
+ <p>
+ Each side keeps track of which channel ID's have been allocated (by either side). Reception of a remote channel ID
+ that is equal to the next available remote channel ID means the remote side is requesting to open a new nested channel;
+ the subsequent payload becomes the data associated with the request, and an extra flag byte is sent after the channel ID
+ indicating the <a href="../../../../org/dellroad/muxable/Directions.html" title="enum in org.dellroad.muxable"><code>Directions</code></a> for the new nested channel.
+
+ <p>
+ Reception of zero length payload implies closing the associated nested channel. Closing a nested channel always means
+ closing both directions.
+
+ <p>
+ Note that it's possible for one side to receive data on a nested channel that it has already closed, because the data
+ may have been sent prior to the remote side receiving the close notification.
 
  <p>
  <b>Java NIO</b>
@@ -179,7 +208,7 @@ implements <a href="../../../../org/dellroad/muxable/MuxableChannel.html" title=
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;org.dellroad.stuff.net.<a href="https://archiecobbs.github.io/dellroad-stuff/site/apidocs/org/dellroad/stuff/net/SelectorSupport.html?is-external=true" title="class or interface in org.dellroad.stuff.net">SelectorSupport</a></h3>
-<code><a href="https://archiecobbs.github.io/dellroad-stuff/site/apidocs/org/dellroad/stuff/net/SelectorSupport.html?is-external=true#DEFAULT_HOUSEKEEPING_INTERVAL" title="class or interface in org.dellroad.stuff.net">DEFAULT_HOUSEKEEPING_INTERVAL</a>, <a href="https://archiecobbs.github.io/dellroad-stuff/site/apidocs/org/dellroad/stuff/net/SelectorSupport.html?is-external=true#log" title="class or interface in org.dellroad.stuff.net">log</a></code></li>
+<code><a href="https://archiecobbs.github.io/dellroad-stuff/site/apidocs/org/dellroad/stuff/net/SelectorSupport.html?is-external=true#DEFAULT_HOUSEKEEPING_INTERVAL" title="class or interface in org.dellroad.stuff.net">DEFAULT_HOUSEKEEPING_INTERVAL</a></code></li>
 </ul>
 </li>
 </ul>

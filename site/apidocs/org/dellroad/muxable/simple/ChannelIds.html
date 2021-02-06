@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li>Prev&nbsp;Class</li>
-<li><a href="../../../../org/dellroad/muxable/simple/OutputQueue.html" title="class in org.dellroad.muxable.simple"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../index.html?org/dellroad/muxable/simple/ChannelIds.html" target="_top">Frames</a></li>
@@ -75,7 +75,7 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.dellroad.muxable.simple.LoggingSupport">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -100,7 +100,12 @@ var activeTableTab = "activeTableTab";
 <li><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple">org.dellroad.muxable.simple.LoggingSupport</a></li>
+<li>
+<ul class="inheritance">
 <li>org.dellroad.muxable.simple.ChannelIds</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -110,16 +115,18 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">ChannelIds</span>
-extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
+extends <a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple">LoggingSupport</a></pre>
 <div class="block">Tracks channel ID's for the <a href="../../../../org/dellroad/muxable/simple/SimpleMuxableChannel.html" title="class in org.dellroad.muxable.simple"><code>SimpleMuxableChannel</code></a> framing protocol.
 
  <p>
  A shared instance of this class should be provided to both the <a href="../../../../org/dellroad/muxable/simple/ProtocolReader.html" title="class in org.dellroad.muxable.simple"><code>ProtocolReader</code></a> and <a href="../../../../org/dellroad/muxable/simple/ProtocolWriter.html" title="class in org.dellroad.muxable.simple"><code>ProtocolWriter</code></a>.
 
  <p>
- Valid channel ID's are range from one to <code>Long.MAX_VALUE</code>. Each side of the connection has its own channel ID
- namespace. In some cases, when both local and remote channel ID's are being passe around, remote channel ID's are negated
- to avoid confusion (but this should always be clearly documented). Channel ID's are never reused.
+ Valid channel ID's are range from one to <code>Long.MAX_VALUE</code>. Channel ID's are never reused. Each side of the
+ connection has its own channel ID namespace. In some cases, when both local and remote channel ID's are being passed around,
+ remote channel ID's are negated to avoid confusion (but this should always be clearly documented). In this class
+ the side of the connection is implied, and the channel ID's are always positive, except for
+ <a href="../../../../org/dellroad/muxable/simple/ChannelIds.html#isChannelOpen-long-"><code>isChannelOpen()</code></a> and <a href="../../../../org/dellroad/muxable/simple/ChannelIds.html#getOpenChannelIds--"><code>getOpenChannelIds()</code></a>.
 
  <p>
  Instances are thread safe.</div>
@@ -129,6 +136,21 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="fields.inherited.from.class.org.dellroad.muxable.simple.LoggingSupport">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;org.dellroad.muxable.simple.<a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple">LoggingSupport</a></h3>
+<code><a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html#log">log</a>, <a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html#logPrefix">logPrefix</a></code></li>
+</ul>
+</li>
+</ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.summary">
@@ -179,30 +201,49 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/dellroad/muxable/simple/ChannelIds.html#getNextLocalChannelId--">getNextLocalChannelId</a></span>()</code>
+<div class="block">Get the next available local channel ID.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/dellroad/muxable/simple/ChannelIds.html#getNextRemoteChannelId--">getNextRemoteChannelId</a></span>()</code>
+<div class="block">Get the next available remote channel ID.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="https://archiecobbs.github.io/dellroad-stuff/site/apidocs/org/dellroad/stuff/util/LongSet.html?is-external=true" title="class or interface in org.dellroad.stuff.util">LongSet</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/dellroad/muxable/simple/ChannelIds.html#getOpenChannelIds--">getOpenChannelIds</a></span>()</code>
 <div class="block">Get all open channel ID's.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/dellroad/muxable/simple/ChannelIds.html#isChannelOpen-long-">isChannelOpen</a></span>(long&nbsp;channelId)</code>
 <div class="block">Determine whether the specified channel is still open.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/dellroad/muxable/simple/ChannelIds.html#validateLocalChannelId-long-">validateLocalChannelId</a></span>(long&nbsp;channelId)</code>
 <div class="block">Validate a local channel ID.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/dellroad/muxable/simple/ChannelIds.html#validateRemoteChannelId-long-">validateRemoteChannelId</a></span>(long&nbsp;channelId)</code>
 <div class="block">Validate a remote channel ID.</div>
 </td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.org.dellroad.muxable.simple.LoggingSupport">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.dellroad.muxable.simple.<a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple">LoggingSupport</a></h3>
+<code><a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html#debug-java.lang.String-java.lang.Object...-">debug</a>, <a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html#error-java.lang.String-java.lang.Object...-">error</a>, <a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html#formatLog-java.lang.String-java.lang.Object...-">formatLog</a>, <a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html#info-java.lang.String-java.lang.Object...-">info</a>, <a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html#simpleLogPrefix-java.lang.Object-">simpleLogPrefix</a>, <a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html#toString-java.nio.ByteBuffer-int-">toString</a>, <a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html#trace-java.lang.String-java.lang.Object...-">trace</a>, <a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html#warn-java.lang.String-java.lang.Object...-">warn</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -241,6 +282,38 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="getNextLocalChannelId--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNextLocalChannelId</h4>
+<pre>public&nbsp;long&nbsp;getNextLocalChannelId()</pre>
+<div class="block">Get the next available local channel ID.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>next local channel ID</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html?is-external=true" title="class or interface in java.lang">IllegalStateException</a></code> - if all 2<sup>63</sup> local channel ID's have already been allocated</dd>
+</dl>
+</li>
+</ul>
+<a name="getNextRemoteChannelId--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNextRemoteChannelId</h4>
+<pre>public&nbsp;long&nbsp;getNextRemoteChannelId()</pre>
+<div class="block">Get the next available remote channel ID.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>next remove channel ID</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html?is-external=true" title="class or interface in java.lang">IllegalStateException</a></code> - if all 2<sup>63</sup> remote channel ID's have already been allocated</dd>
+</dl>
+</li>
+</ul>
 <a name="allocateLocalChannelId--">
 <!--   -->
 </a>
@@ -253,7 +326,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>new local channel ID (always positive)</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html?is-external=true" title="class or interface in java.lang">IllegalStateException</a></code> - if all 2<sup>63</sup> channel ID's have already been allocated</dd>
+<dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html?is-external=true" title="class or interface in java.lang">IllegalStateException</a></code> - if all 2<sup>63</sup> local channel ID's have already been allocated</dd>
 </dl>
 </li>
 </ul>
@@ -410,7 +483,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <div class="subNav">
 <ul class="navList">
 <li>Prev&nbsp;Class</li>
-<li><a href="../../../../org/dellroad/muxable/simple/OutputQueue.html" title="class in org.dellroad.muxable.simple"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../index.html?org/dellroad/muxable/simple/ChannelIds.html" target="_top">Frames</a></li>
@@ -435,7 +508,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.dellroad.muxable.simple.LoggingSupport">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>

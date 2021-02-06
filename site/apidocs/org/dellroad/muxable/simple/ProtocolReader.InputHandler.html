@@ -203,7 +203,7 @@ var activeTableTab = "activeTableTab";
 
  <p>
  Note that it's possible to receive data on a nested channel after the local side has closed that channel,
- because the remote side may not know that the nested channel has been closed for a little while.</div>
+ because the remote side may not yet know that the nested channel has been closed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>channelId</code> - the encoded ID of a nested channel (postive for local channels, negative for remote channels)</dd>
@@ -224,11 +224,11 @@ var activeTableTab = "activeTableTab";
 <div class="block">An existing nested channel has been closed by the remote side.
 
  <p>
- No more data will <a href="../../../../org/dellroad/muxable/simple/ProtocolReader.InputHandler.html#nestedChannelData-long-java.nio.ByteBuffer-">appear</a> on the specified nested channel.
+ No more incoming data will <a href="../../../../org/dellroad/muxable/simple/ProtocolReader.InputHandler.html#nestedChannelData-long-java.nio.ByteBuffer-">appear</a> on the specified nested channel.
 
  <p>
- Nested channels are bidirectional, but both directions are opened and closed at the same time.
- This method implies both the incoming and outgoing channels are being closed.</div>
+ Although nested channels are in general bidirectional, both directions are opened and closed at the same time.
+ This method implies both the incoming and outgoing directions are being closed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>channelId</code> - the encoded ID of an open nested channel (postive for local channels, negative for remote channels)</dd>

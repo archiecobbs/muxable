@@ -69,7 +69,7 @@
 <!--   -->
 </a></div>
 <!-- ========= END OF TOP NAVBAR ========= -->
-<div class="contentContainer"><a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<a name="I:A">
+<div class="contentContainer"><a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<a name="I:A">
 <!--   -->
 </a>
 <h2 class="title">A</h2>
@@ -104,7 +104,7 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/ProtocolWriter.html#closeConnection--">closeConnection()</a></span> - Method in class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/ProtocolWriter.html" title="class in org.dellroad.muxable.simple">ProtocolWriter</a></dt>
 <dd>
-<div class="block">Send a "close connection" frame to the peer.</div>
+<div class="block">Close the entire connection.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/ProtocolWriter.html#closeNestedChannel-long-">closeNestedChannel(long)</a></span> - Method in class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/ProtocolWriter.html" title="class in org.dellroad.muxable.simple">ProtocolWriter</a></dt>
 <dd>
@@ -120,6 +120,14 @@
 </a>
 <h2 class="title">D</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/LoggingSupport.html#debug-java.lang.String-java.lang.Object...-">debug(String, Object...)</a></span> - Method in class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple">LoggingSupport</a></dt>
+<dd>
+<div class="block">Log at debug level (if enabled).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/OutputQueue.html#describeFlags-int-">describeFlags(int)</a></span> - Static method in class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/OutputQueue.html" title="class in org.dellroad.muxable.simple">OutputQueue</a></dt>
+<dd>
+<div class="block">Return a debug description of the given flags.</div>
+</dd>
 <dt><a href="org/dellroad/muxable/Directions.html" title="enum in org.dellroad.muxable"><span class="typeNameLink">Directions</span></a> - Enum in <a href="org/dellroad/muxable/package-summary.html">org.dellroad.muxable</a></dt>
 <dd>
 <div class="block">Used to specifify which of input and/or output directions are desired.</div>
@@ -134,6 +142,10 @@
 <dd>
 <div class="block">Add the given data to queue.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/LoggingSupport.html#error-java.lang.String-java.lang.Object...-">error(String, Object...)</a></span> - Method in class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple">LoggingSupport</a></dt>
+<dd>
+<div class="block">Log at error level (if enabled).</div>
+</dd>
 </dl>
 <a name="I:F">
 <!--   -->
@@ -147,6 +159,10 @@
 <dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/ProtocolConstants.html#FLAG_DIRECTION_OUTPUT">FLAG_DIRECTION_OUTPUT</a></span> - Static variable in class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/ProtocolConstants.html" title="class in org.dellroad.muxable.simple">ProtocolConstants</a></dt>
 <dd>
 <div class="block">Flag that indicates a new nested channel should support communicating from the originator to the peer.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/LoggingSupport.html#formatLog-java.lang.String-java.lang.Object...-">formatLog(String, Object...)</a></span> - Method in class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple">LoggingSupport</a></dt>
+<dd>
+<div class="block">Format a log message.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/ChannelIds.html#freeChannelId-long-boolean-">freeChannelId(long, boolean)</a></span> - Method in class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/ChannelIds.html" title="class in org.dellroad.muxable.simple">ChannelIds</a></dt>
 <dd>
@@ -171,6 +187,14 @@
 </dd>
 <dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/SimpleMuxableChannel.html#getNestedChannelRequests--">getNestedChannelRequests()</a></span> - Method in class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/SimpleMuxableChannel.html" title="class in org.dellroad.muxable.simple">SimpleMuxableChannel</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/ChannelIds.html#getNextLocalChannelId--">getNextLocalChannelId()</a></span> - Method in class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/ChannelIds.html" title="class in org.dellroad.muxable.simple">ChannelIds</a></dt>
+<dd>
+<div class="block">Get the next available local channel ID.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/ChannelIds.html#getNextRemoteChannelId--">getNextRemoteChannelId()</a></span> - Method in class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/ChannelIds.html" title="class in org.dellroad.muxable.simple">ChannelIds</a></dt>
+<dd>
+<div class="block">Get the next available remote channel ID.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/ProtocolViolationException.html#getOffset--">getOffset()</a></span> - Method in exception org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/ProtocolViolationException.html" title="class in org.dellroad.muxable.simple">ProtocolViolationException</a></dt>
 <dd>
 <div class="block">Get the absolute position in the input stream at which the protocol violation was detected.</div>
@@ -221,6 +245,10 @@
 </a>
 <h2 class="title">I</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/LoggingSupport.html#info-java.lang.String-java.lang.Object...-">info(String, Object...)</a></span> - Method in class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple">LoggingSupport</a></dt>
+<dd>
+<div class="block">Log at info level (if enabled).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/ProtocolReader.html#input-java.nio.ByteBuffer-">input(ByteBuffer)</a></span> - Method in class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/ProtocolReader.html" title="class in org.dellroad.muxable.simple">ProtocolReader</a></dt>
 <dd>
 <div class="block">Input new data from the remote side into the protocol state machine.</div>
@@ -238,6 +266,32 @@
 <div class="block">Determine if this queue is full.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/SimpleMuxableChannel.html#isOpen--">isOpen()</a></span> - Method in class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/SimpleMuxableChannel.html" title="class in org.dellroad.muxable.simple">SimpleMuxableChannel</a></dt>
+<dd>&nbsp;</dd>
+</dl>
+<a name="I:L">
+<!--   -->
+</a>
+<h2 class="title">L</h2>
+<dl>
+<dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/LoggingSupport.html#log">log</a></span> - Variable in class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple">LoggingSupport</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple"><span class="typeNameLink">LoggingSupport</span></a> - Class in <a href="org/dellroad/muxable/simple/package-summary.html">org.dellroad.muxable.simple</a></dt>
+<dd>
+<div class="block">Debug logging support class.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/LoggingSupport.html#LoggingSupport--">LoggingSupport()</a></span> - Constructor for class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple">LoggingSupport</a></dt>
+<dd>
+<div class="block">Default constructor.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/LoggingSupport.html#LoggingSupport-java.lang.Object-">LoggingSupport(Object)</a></span> - Constructor for class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple">LoggingSupport</a></dt>
+<dd>
+<div class="block">Constructor.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/LoggingSupport.html#LoggingSupport-org.slf4j.Logger-java.lang.String-">LoggingSupport(Logger, String)</a></span> - Constructor for class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple">LoggingSupport</a></dt>
+<dd>
+<div class="block">Primary constructor.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/LoggingSupport.html#logPrefix">logPrefix</a></span> - Variable in class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple">LoggingSupport</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <a name="I:M">
@@ -373,10 +427,14 @@
 <dd>
 <div class="block">Send raw data to the remote peer.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/LoggingSupport.html#simpleLogPrefix-java.lang.Object-">simpleLogPrefix(Object)</a></span> - Static method in class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple">LoggingSupport</a></dt>
+<dd>
+<div class="block">Build a simple log message prefix based on the given object.</div>
+</dd>
 <dt><a href="org/dellroad/muxable/simple/SimpleMuxableChannel.html" title="class in org.dellroad.muxable.simple"><span class="typeNameLink">SimpleMuxableChannel</span></a> - Class in <a href="org/dellroad/muxable/simple/package-summary.html">org.dellroad.muxable.simple</a></dt>
 <dd>
 <div class="block">An implementation of the <a href="org/dellroad/muxable/MuxableChannel.html" title="interface in org.dellroad.muxable"><code>MuxableChannel</code></a> interface that multiplexes nested channels over a single underlying
- <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/ByteChannel.html?is-external=true" title="class or interface in java.nio.channels"><code>ByteChannel</code></a> (or <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/ReadableByteChannel.html?is-external=true" title="class or interface in java.nio.channels"><code>ReadableByteChannel</code></a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/WritableByteChannel.html?is-external=true" title="class or interface in java.nio.channels"><code>WritableByteChannel</code></a> pair) using a simple framing scheme.</div>
+ <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/ByteChannel.html?is-external=true" title="class or interface in java.nio.channels"><code>ByteChannel</code></a> (or <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/ReadableByteChannel.html?is-external=true" title="class or interface in java.nio.channels"><code>ReadableByteChannel</code></a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/channels/WritableByteChannel.html?is-external=true" title="class or interface in java.nio.channels"><code>WritableByteChannel</code></a> pair) using a simple framing protocol.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/SimpleMuxableChannel.html#SimpleMuxableChannel-java.nio.channels.ByteChannel-">SimpleMuxableChannel(ByteChannel)</a></span> - Constructor for class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/SimpleMuxableChannel.html" title="class in org.dellroad.muxable.simple">SimpleMuxableChannel</a></dt>
 <dd>
@@ -402,6 +460,20 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/SimpleMuxableChannel.html#stop--">stop()</a></span> - Method in class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/SimpleMuxableChannel.html" title="class in org.dellroad.muxable.simple">SimpleMuxableChannel</a></dt>
 <dd>&nbsp;</dd>
+</dl>
+<a name="I:T">
+<!--   -->
+</a>
+<h2 class="title">T</h2>
+<dl>
+<dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/LoggingSupport.html#toString-java.nio.ByteBuffer-int-">toString(ByteBuffer, int)</a></span> - Method in class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple">LoggingSupport</a></dt>
+<dd>
+<div class="block">Produce a debug-loggable <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang"><code>String</code></a> version of the given <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio"><code>ByteBuffer</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/LoggingSupport.html#trace-java.lang.String-java.lang.Object...-">trace(String, Object...)</a></span> - Method in class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple">LoggingSupport</a></dt>
+<dd>
+<div class="block">Log at trace level (if enabled).</div>
+</dd>
 </dl>
 <a name="I:V">
 <!--   -->
@@ -431,6 +503,10 @@ the order they are declared.</div>
 </a>
 <h2 class="title">W</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/LoggingSupport.html#warn-java.lang.String-java.lang.Object...-">warn(String, Object...)</a></span> - Method in class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple">LoggingSupport</a></dt>
+<dd>
+<div class="block">Log at warn level (if enabled).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/dellroad/muxable/simple/OutputQueue.html#WAS_EMPTY">WAS_EMPTY</a></span> - Static variable in class org.dellroad.muxable.simple.<a href="org/dellroad/muxable/simple/OutputQueue.html" title="class in org.dellroad.muxable.simple">OutputQueue</a></dt>
 <dd>
 <div class="block">Flag bit in the flags returned by <a href="org/dellroad/muxable/simple/OutputQueue.html#enqueue-java.nio.ByteBuffer-"><code>enqueue()</code></a> and <a href="org/dellroad/muxable/simple/OutputQueue.html#writeTo-java.nio.channels.WritableByteChannel-"><code>writeTo()</code></a>.</div>
@@ -448,7 +524,7 @@ the order they are declared.</div>
 <div class="block">Write as much data as possible to the specified output channel.</div>
 </dd>
 </dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;</div>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;</div>
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
 <div class="bottomNav"><a name="navbar.bottom">
 <!--   -->

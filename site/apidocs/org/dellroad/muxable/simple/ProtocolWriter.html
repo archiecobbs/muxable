@@ -75,7 +75,7 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.dellroad.muxable.simple.LoggingSupport">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -100,7 +100,12 @@ var activeTableTab = "activeTableTab";
 <li><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple">org.dellroad.muxable.simple.LoggingSupport</a></li>
+<li>
+<ul class="inheritance">
 <li>org.dellroad.muxable.simple.ProtocolWriter</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -110,7 +115,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">ProtocolWriter</span>
-extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
+extends <a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple">LoggingSupport</a></pre>
 <div class="block">Output state machine for the <a href="../../../../org/dellroad/muxable/simple/SimpleMuxableChannel.html" title="class in org.dellroad.muxable.simple"><code>SimpleMuxableChannel</code></a> framing protocol.
 
  <p>
@@ -138,6 +143,21 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/dellroad/muxable/simple/ProtocolWriter.OutputHandler.html" title="interface in org.dellroad.muxable.simple">ProtocolWriter.OutputHandler</a></span></code>&nbsp;</td>
 </tr>
 </table>
+</li>
+</ul>
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="fields.inherited.from.class.org.dellroad.muxable.simple.LoggingSupport">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;org.dellroad.muxable.simple.<a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple">LoggingSupport</a></h3>
+<code><a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html#log">log</a>, <a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html#logPrefix">logPrefix</a></code></li>
+</ul>
 </li>
 </ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -175,11 +195,11 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/dellroad/muxable/simple/ProtocolWriter.html#closeConnection--">closeConnection</a></span>()</code>
-<div class="block">Send a "close connection" frame to the peer.</div>
+<div class="block">Close the entire connection.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>void</code></td>
+<td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../org/dellroad/muxable/simple/ProtocolWriter.html#closeNestedChannel-long-">closeNestedChannel</a></span>(long&nbsp;channelId)</code>
 <div class="block">Close an open nested channel.</div>
 </td>
@@ -199,6 +219,13 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.org.dellroad.muxable.simple.LoggingSupport">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.dellroad.muxable.simple.<a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html" title="class in org.dellroad.muxable.simple">LoggingSupport</a></h3>
+<code><a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html#debug-java.lang.String-java.lang.Object...-">debug</a>, <a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html#error-java.lang.String-java.lang.Object...-">error</a>, <a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html#formatLog-java.lang.String-java.lang.Object...-">formatLog</a>, <a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html#info-java.lang.String-java.lang.Object...-">info</a>, <a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html#simpleLogPrefix-java.lang.Object-">simpleLogPrefix</a>, <a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html#toString-java.nio.ByteBuffer-int-">toString</a>, <a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html#trace-java.lang.String-java.lang.Object...-">trace</a>, <a href="../../../../org/dellroad/muxable/simple/LoggingSupport.html#warn-java.lang.String-java.lang.Object...-">warn</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -294,7 +321,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
  sent and this method returns false.
 
  <p>
- Any generated output will delivered to the configured <a href="../../../../org/dellroad/muxable/simple/ProtocolWriter.OutputHandler.html" title="interface in org.dellroad.muxable.simple"><code>ProtocolWriter.OutputHandler</code></a> synchronously (in the current thread).
+ Generated output, if any, will delivered to the configured <a href="../../../../org/dellroad/muxable/simple/ProtocolWriter.OutputHandler.html" title="interface in org.dellroad.muxable.simple"><code>ProtocolWriter.OutputHandler</code></a> synchronously (in the current thread).
  However, this method must not be invoked re-entrantly.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -317,19 +344,22 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>closeNestedChannel</h4>
-<pre>public&nbsp;void&nbsp;closeNestedChannel(long&nbsp;channelId)
-                        throws <a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<pre>public&nbsp;boolean&nbsp;closeNestedChannel(long&nbsp;channelId)
+                           throws <a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <div class="block">Close an open nested channel.
 
  <p>
- This sends a "close connection" frame to the peer, unless the peer already knows that the channel is closed.
+ This sends a "close connection" frame to the peer, unless we know the already peer knows the channel is closed.
 
  <p>
- Any generated output will delivered to the configured <a href="../../../../org/dellroad/muxable/simple/ProtocolWriter.OutputHandler.html" title="interface in org.dellroad.muxable.simple"><code>ProtocolWriter.OutputHandler</code></a> synchronously (in the current thread).
+ Generated output, if any, will delivered to the configured <a href="../../../../org/dellroad/muxable/simple/ProtocolWriter.OutputHandler.html" title="interface in org.dellroad.muxable.simple"><code>ProtocolWriter.OutputHandler</code></a> synchronously (in the current thread).
  However, this method must not be invoked re-entrantly.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>channelId</code> - encoded channel ID (positive for local channels, negative for remote channels)</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if a "close connection" frame was written to the <a href="../../../../org/dellroad/muxable/simple/ProtocolWriter.OutputHandler.html" title="interface in org.dellroad.muxable.simple"><code>ProtocolWriter.OutputHandler</code></a>,
+  false the peer already knows that the channel is closed</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - if thrown by the <a href="../../../../org/dellroad/muxable/simple/ProtocolWriter.OutputHandler.html" title="interface in org.dellroad.muxable.simple"><code>ProtocolWriter.OutputHandler</code></a></dd>
 <dd><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - if <code>channelId</code> is not the ID of an open nested channel</dd>
@@ -345,10 +375,10 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <h4>closeConnection</h4>
 <pre>public&nbsp;void&nbsp;closeConnection()
                      throws <a href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<div class="block">Send a "close connection" frame to the peer.
+<div class="block">Close the entire connection.
 
  <p>
- This implicitly closes all nested channels on the remote side.
+ This sends a "close connection" frame to the peer, which closes the overall connection and all nested channels.
 
  <p>
  Generated output will delivered to the configured <a href="../../../../org/dellroad/muxable/simple/ProtocolWriter.OutputHandler.html" title="interface in org.dellroad.muxable.simple"><code>ProtocolWriter.OutputHandler</code></a> synchronously (in the current thread).
@@ -415,7 +445,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.dellroad.muxable.simple.LoggingSupport">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
