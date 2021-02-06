@@ -26,12 +26,41 @@ import org.dellroad.stuff.util.LongMap;
 
 /**
  * An implementation of the {@link MuxableChannel} interface that multiplexes nested channels over a single underlying
- * {@link ByteChannel} (or {@link ReadableByteChannel}, {@link WritableByteChannel} pair) using a simple framing scheme.
+ * {@link ByteChannel} (or {@link ReadableByteChannel}, {@link WritableByteChannel} pair) using a simple framing protocol.
  *
  * <p>
  * The nested channel data and {@link NestedChannelRequest}s share the same underlying "real" channel,
  * so any one left unread for too long can block all the others. This implementation only guarantees that
  * "senseless" deadlock won't happen (see {@link MuxableChannel}).
+ *
+ * <p>
+ * <b>Protocol Description</b>
+ *
+ * <p>
+ * After the initial connection, each side transmits a {@linkplain ProtocolConstants#PROTOCOL_COOKIE protocol cookie}
+ * followed its {@linkplain ProtocolConstants#CURRENT_PROTOCOL_VERSION current protocol version}. Once so established,
+ * the protocol simply consists of <b>frames</b> being sent back and forth. A frame consists of a <b>channel ID</b>,
+ * a <b>payload length</b>, and finally the <b>payload content</b>. The channel ID and length values are encoded
+ * via {@link io.permazen.util.LongEncoder}.
+ *
+ * <p>
+ * The channel ID is negated by the sender for channels created by the receiver; this way, the receiver can differentiate
+ * a local channel ID (negative) from a remote channel ID (positive). A channel ID of zero means to immediately close
+ * the entire connection.
+ *
+ * <p>
+ * Each side keeps track of which channel ID's have been allocated (by either side). Reception of a remote channel ID
+ * that is equal to the next available remote channel ID means the remote side is requesting to open a new nested channel;
+ * the subsequent payload becomes the data associated with the request, and an extra flag byte is sent after the channel ID
+ * indicating the {@link Directions} for the new nested channel.
+ *
+ * <p>
+ * Reception of zero length payload implies closing the associated nested channel. Closing a nested channel always means
+ * closing both directions.
+ *
+ * <p>
+ * Note that it's possible for one side to receive data on a nested channel that it has already closed, because the data
+ * may have been sent prior to the remote side receiving the close notification.
  *
  * <p>
  * <b>Java NIO</b>

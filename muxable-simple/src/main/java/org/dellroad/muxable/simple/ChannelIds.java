@@ -14,9 +14,11 @@ import org.dellroad.stuff.util.LongSet;
  * A shared instance of this class should be provided to both the {@link ProtocolReader} and {@link ProtocolWriter}.
  *
  * <p>
- * Valid channel ID's are range from one to {@code Long.MAX_VALUE}. Each side of the connection has its own channel ID
- * namespace. In some cases, when both local and remote channel ID's are being passe around, remote channel ID's are negated
- * to avoid confusion (but this should always be clearly documented). Channel ID's are never reused.
+ * Valid channel ID's are range from one to {@code Long.MAX_VALUE}. Channel ID's are never reused. Each side of the
+ * connection has its own channel ID namespace. In some cases, when both local and remote channel ID's are being passed around,
+ * remote channel ID's are negated to avoid confusion (but this should always be clearly documented). In this class
+ * the side of the connection is implied, and the channel ID's are always positive, except for
+ * {@link #isChannelOpen isChannelOpen()} and {@link #getOpenChannelIds getOpenChannelIds()}.
  *
  * <p>
  * Instances are thread safe.

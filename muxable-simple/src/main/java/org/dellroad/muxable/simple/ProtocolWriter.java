@@ -89,7 +89,7 @@ public class ProtocolWriter {
      * sent and this method returns false.
      *
      * <p>
-     * Any generated output will delivered to the configured {@link OutputHandler} synchronously (in the current thread).
+     * Generated output, if any, will delivered to the configured {@link OutputHandler} synchronously (in the current thread).
      * However, this method must not be invoked re-entrantly.
      *
      * @param channelId encoded channel ID (positive for local channels, negative for remote channels)
@@ -124,18 +124,20 @@ public class ProtocolWriter {
      * Close an open nested channel.
      *
      * <p>
-     * This sends a "close connection" frame to the peer, unless the peer already knows that the channel is closed.
+     * This sends a "close connection" frame to the peer, unless we know the already peer knows the channel is closed.
      *
      * <p>
-     * Any generated output will delivered to the configured {@link OutputHandler} synchronously (in the current thread).
+     * Generated output, if any, will delivered to the configured {@link OutputHandler} synchronously (in the current thread).
      * However, this method must not be invoked re-entrantly.
      *
      * @param channelId encoded channel ID (positive for local channels, negative for remote channels)
+     * @return true if a "close connection" frame was written to the {@link OutputHandler},
+     *  false the peer already knows that the channel is closed
      * @throws IOException if thrown by the {@link OutputHandler}
      * @throws IllegalArgumentException if {@code channelId} is not the ID of an open nested channel
      * @throws IllegalStateException if {@link #closeConnection closeConnection()} has been invoked on this instance
      */
-    public void closeNestedChannel(long channelId) throws IOException {
+    public boolean closeNestedChannel(long channelId) throws IOException {
 
         // Sanity check
         if (this.reentrantHandler)
@@ -145,17 +147,18 @@ public class ProtocolWriter {
         final boolean closed = channelId < 0 ?
           this.channelIds.freeChannelId(-channelId, false) : this.channelIds.freeChannelId(channelId, true);
         if (closed)
-            return;
+            return false;
 
         // Send data
         this.sendData(channelId, null, null);
+        return true;
     }
 
     /**
-     * Send a "close connection" frame to the peer.
+     * Close the entire connection.
      *
      * <p>
-     * This implicitly closes all nested channels on the remote side.
+     * This sends a "close connection" frame to the peer, which closes the overall connection and all nested channels.
      *
      * <p>
      * Generated output will delivered to the configured {@link OutputHandler} synchronously (in the current thread).
@@ -239,6 +242,7 @@ public class ProtocolWriter {
          *
          * @param data the data to send; this method may take ownership
          * @throws IOException if an I/O error occurs
+         * @throws IllegalArgumentException if {@code data} is null
          */
         void sendOutput(ByteBuffer data) throws IOException;
     }

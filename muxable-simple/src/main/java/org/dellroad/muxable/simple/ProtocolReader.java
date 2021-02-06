@@ -439,7 +439,7 @@ public class ProtocolReader {
          *
          * <p>
          * Note that it's possible to receive data on a nested channel after the local side has closed that channel,
-         * because the remote side may not know that the nested channel has been closed for a little while.
+         * because the remote side may not yet know that the nested channel has been closed.
          *
          * @param channelId the encoded ID of a nested channel (postive for local channels, negative for remote channels)
          * @param data new channel data
@@ -451,11 +451,11 @@ public class ProtocolReader {
          * An existing nested channel has been closed by the remote side.
          *
          * <p>
-         * No more data will {@linkplain #nestedChannelData appear} on the specified nested channel.
+         * No more incoming data will {@linkplain #nestedChannelData appear} on the specified nested channel.
          *
          * <p>
-         * Nested channels are bidirectional, but both directions are opened and closed at the same time.
-         * This method implies both the incoming and outgoing channels are being closed.
+         * Although nested channels are in general bidirectional, both directions are opened and closed at the same time.
+         * This method implies both the incoming and outgoing directions are being closed.
          *
          * @param channelId the encoded ID of an open nested channel (postive for local channels, negative for remote channels)
          * @throws IOException if an I/O error occurs
