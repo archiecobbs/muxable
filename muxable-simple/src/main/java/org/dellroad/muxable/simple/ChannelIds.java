@@ -56,7 +56,7 @@ public class ChannelIds {
      * Allocate a new local channel ID.
      *
      * @return new local channel ID (always positive)
-     * @throws IllegalStateException if all 2<sup>63</sup> channel ID's have already been allocated
+     * @throws IllegalStateException if all 2<sup>63</sup> local channel ID's have already been allocated
      */
     public synchronized long allocateLocalChannelId() {
         if (this.prevLocalChannelId == Long.MAX_VALUE)
