@@ -34,8 +34,8 @@ public class ProtocolReader {
     private long longValue;                                                             // the long value once completed
 
     // Incoming payload info
-    private long payloadChannelId;                                                      // payload's channel ID
-    private boolean localChannelId;                                                     // true if channel ID is a local channel
+    private long payloadChannelId;                                                      // payload's channel ID (always positive)
+    private boolean payloadChannelIdIsLocal;                                            // true if channel ID is a local channel
     private boolean newChannelRequest;                                                  // payload is a new channel request
     private Directions newChannelDirections;                                            // new channel request input and/or output
     private ByteBuffer payloadBuffer;                                                   // payload data buffer
@@ -168,15 +168,16 @@ public class ProtocolReader {
               String.format("rec'd invalid frame: invalid encoded channel ID %d", this.longValue));
         }
 
+        // Value was encoded by peer, so negative & positive are swapped
+        this.payloadChannelIdIsLocal = this.longValue < 0;
+        this.payloadChannelId = Math.abs(this.longValue);
+
         // Handle local channel ID vs. remote channel ID
-        this.localChannelId = this.longValue < 0;                       // value coming from peer, so swap negative & positive
         try {
-            if (this.localChannelId) {                                      // it's a local channel ID
-                this.payloadChannelId = -this.longValue;
+            if (this.payloadChannelIdIsLocal) {
                 this.newChannelRequest = false;
                 this.channelIds.validateLocalChannelId(this.payloadChannelId);
-            } else {                                                        // it's a remote channel ID
-                this.payloadChannelId = this.longValue;
+            } else {
                 this.newChannelRequest = this.channelIds.allocateRemoteChannelId(this.payloadChannelId);
                 if (this.newChannelRequest) {
                     this.state = State.READING_DIRECTIONS;
@@ -230,7 +231,7 @@ public class ProtocolReader {
         if (this.longValue < 0 || this.longValue > Integer.MAX_VALUE) {
             throw this.violation = new ProtocolViolationException(this.longValueOffset,
               String.format("rec'd frame on %s channel %d with invalid payload length %d",
-               this.localChannelId ? "local" : "remote", this.payloadChannelId, this.longValue));
+               this.payloadChannelIdIsLocal ? "local" : "remote", this.payloadChannelId, this.longValue));
         }
         final int payloadLength = (int)this.longValue;
 
@@ -238,7 +239,7 @@ public class ProtocolReader {
         if (!this.newChannelRequest && payloadLength == 0) {
 
             // Deallocate channel
-            this.channelIds.freeChannelId(this.payloadChannelId, this.localChannelId);
+            this.channelIds.freeChannelId(this.payloadChannelId, this.payloadChannelIdIsLocal);
 
             // Notify input handler
             final long encodedChannelId = this.getEncodedChannelId();
@@ -314,7 +315,7 @@ public class ProtocolReader {
         // Reset state and start reading the next frame
         this.payloadBuffer = null;
         this.payloadChannelId = 0;
-        this.localChannelId = false;
+        this.payloadChannelIdIsLocal = false;
         this.newChannelRequest = false;
         this.state = State.READING_CHANNEL_ID;
     }
@@ -383,7 +384,7 @@ public class ProtocolReader {
 
     private long getEncodedChannelId() {
         assert this.payloadChannelId >= 1;
-        return this.localChannelId ? this.payloadChannelId : -this.payloadChannelId;
+        return this.payloadChannelIdIsLocal ? this.payloadChannelId : -this.payloadChannelId;
     }
 
     // Read out the next "length" bytes from the given ByteBuffer and return them in a (possibly) new ByteBuffer
