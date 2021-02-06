@@ -91,6 +91,9 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
 
     private static final int REQUEST_QUEUE_CAPACITY = 1024;
 
+    // Logging
+    private final LoggingSupport log = new LoggingSupport(this);
+
     // Given channel(s)
     private final ReadableByteChannel input;
     private final WritableByteChannel output;
@@ -188,6 +191,7 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
             throw new IOException("channel is in state " + this.state, this.shutdownCause);
 
         // Allocate a new local channel ID and send request to peer
+        this.log.info("creating new local channel %d", this.channelIds.getNextLocalChannelId());
         final long channelId = this.writer.openNestedChannel(requestData, directions);
 
         // Setup the nested channel locally
@@ -203,18 +207,22 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
 
     // Read data and run it through the input protocol state machine
     private void handleMainChannelReadable() throws IOException {
+        this.log.trace("%s %s", "main channel", "readable");
         if (!this.reader.input(this.mainInput.read()))
             throw new IOException("framing protocol was terminated by the remote peer");
     }
 
     // Read data and run it through the output protocol state machine
     private void handleNestedChannelReadable(NestedInputChannelInfo nestedInput) throws IOException {
+        this.log.trace("%s %s", nestedInput, "readable");
         this.writer.writeNestedChannel(nestedInput.getChannelId(), nestedInput.read());
     }
 
     // Write out some enqueued data on the main channel and update selectors if there was a meaningful change
     private void handleMainChannelWritable() throws IOException {
+        this.log.trace("%s %s", "main channel", "writable");
         final int flags = this.mainOutput.write();
+        this.log.trace("%s %s", "main channel", OutputQueue.describeFlags(flags));
         if (this.wentNonFull(flags))
             this.nestedInputMap.values().forEach(NestedInputChannelInfo::startReading);
         if (this.wentEmpty(flags))
@@ -223,7 +231,9 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
 
     // Write out some enqueued data on the nested channel and update selectors if there was a meaningful change
     private void handleNestedChannelWritable(NestedOutputChannelInfo nestedOutput) throws IOException {
+        this.log.trace("%s %s", nestedOutput, "writable");
         final int flags = nestedOutput.write();
+        this.log.trace("%s %s", nestedOutput, OutputQueue.describeFlags(flags));
         if (this.wentFull(flags) && this.numNestedOutputsFull++ == 0)
             this.mainInput.stopReading();
         if (this.wentNonFull(flags) && --this.numNestedOutputsFull == 0)
@@ -234,6 +244,7 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
 
     private void handleMainChannelClosed(Throwable cause) {
         if (this.shutdownCause == null) {
+            this.log.info("exception on %s: %s", "main channel", cause);
             this.shutdownCause = cause;
             this.close();
         }
@@ -243,6 +254,7 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
 
         // Close the nested channel (both sides)
         final long channelId = nestedInfo.getChannelId();
+        this.log.info("exception on %s: %s", nestedInfo, cause);
         this.closeNestedChannel(channelId);
 
         // Notify peer
@@ -256,17 +268,24 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
 // ProtocolReader.InputHandler
 
     private void nestedChannelRequest(long channelId, ByteBuffer requestData, Directions directions) throws IOException {
+        this.log.debug("rec'd new channel request: remote channel %d, requestData %s",
+          -channelId, this.log.toString(requestData, 64));
         this.requests.add(this.newNestedChannel(channelId, requestData, directions));
     }
 
     private void nestedChannelData(long channelId, ByteBuffer data) {
         final NestedOutputChannelInfo nestedOutput = this.nestedOutputMap.get(channelId);
-        if (nestedOutput == null)
-            return;                                 // remote must have sent the data before it knew we closed the channel
+        if (nestedOutput == null) {                         // remote must have sent the data before it knew we closed the channel
+            this.log.debug("ignoring data on closed %s channel %s: %s",
+              channelId < 0 ? "remote" : "local", Math.abs(channelId), this.log.toString(data, 64));
+            return;
+        }
+        this.log.trace("rec'd data on %s: %s", nestedOutput, this.log.toString(data, 64));
         nestedOutput.enqueue(data);
     }
 
     private void nestedChannelClosed(long channelId) {
+        this.log.debug("rec'd close for %s channel %d", channelId < 0 ? "remote" : "local", Math.abs(channelId));
         this.closeNestedChannel(channelId);
     }
 
@@ -274,7 +293,11 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
 
     // Write out some enqueued data on the nested channel and update selectors if there was a meaningful change
     private void sendOutput(ByteBuffer data) throws IOException {
+        if (data == null)
+            throw new IllegalArgumentException("null data");
+        this.log.trace("writing to main output: %s", this.log.toString(data, 64));
         final int flags = this.mainOutput.enqueue(data);
+        this.log.trace("%s %s", "main output", OutputQueue.describeFlags(flags));
         if (this.wentNonEmpty(flags))
             this.mainOutput.startWriting();
         if (this.wentFull(flags))
@@ -290,6 +313,7 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
         // Sanity check
         if (!this.state.equals(State.NOT_STARTED))
             throw new IllegalStateException("can't start in state " + this.state);
+        this.log.info("starting");
         super.start();
 
         // Create main input & output
@@ -298,14 +322,17 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
 
         // Start reading main input
         this.mainInput.startReading();
+        this.log.info("started");
     }
 
     @Override
     public synchronized void stop() {
         if (this.state.equals(State.RUNNING)) {
+            this.log.info("stopping");
             super.stop();
             this.shutdown();
             this.state = State.STOPPED;
+            this.log.info("stopped");
         }
     }
 
@@ -329,6 +356,9 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
         // Sanity check
         if (this.nestedInputMap.containsKey(channelId) || this.nestedOutputMap.containsKey(channelId))
             throw new RuntimeException("internal error");
+
+        // Debug
+        this.log.info("opening new %s %s channel %d", directions, channelId < 0 ? "remote" : "local", Math.abs(channelId));
 
         // Initialize
         //final SelectorProvider provider = this.provider;              - TODO with newer dellroad-stuff
@@ -360,6 +390,9 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
     }
 
     private void closeNestedChannel(long channelId) {
+
+        // Debug
+        this.log.info("closing %s channel %d", channelId < 0 ? "remote" : "local", Math.abs(channelId));
 
         // Close local -> peer direction
         final NestedInputChannelInfo nestedInput = this.nestedInputMap.remove(channelId);
@@ -433,6 +466,12 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
             return this.channel;
         }
 
+        /**
+         * Describe this channel for debug purposes.
+         */
+        @Override
+        public abstract String toString();
+
         @Override
         public void close() {
             SimpleMuxableChannel.this.closeAndCatch(this.channel);
@@ -451,10 +490,12 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
         }
 
         public void startReading() {
+            SimpleMuxableChannel.this.log.trace("%s %s %s", this, "enable", "select for read");
             SimpleMuxableChannel.this.selectFor(this.getKey(), SelectionKey.OP_READ, true);
         }
 
         public void stopReading() {
+            SimpleMuxableChannel.this.log.trace("%s %s %s", this, "disable", "select for read");
             SimpleMuxableChannel.this.selectFor(this.getKey(), SelectionKey.OP_READ, false);
         }
 
@@ -468,6 +509,13 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
 // NestedChannelInfo
 
     private interface NestedChannelInfo {
+
+        /**
+         * Determine whether channel was originated remotely or locally.
+         */
+        default boolean isRemote() {
+            return this.getChannelId() < 0;
+        }
 
         /**
          * Get the (encoded) channel ID for this channel.
@@ -491,6 +539,11 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
         @Override
         public void close(Throwable cause) {
             SimpleMuxableChannel.this.handleMainChannelClosed(cause);
+        }
+
+        @Override
+        public String toString() {
+            return "main input channel";
         }
     }
 
@@ -519,6 +572,11 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
         public void close(Throwable cause) {
             SimpleMuxableChannel.this.handleNestedChannelClosed(this, cause);
         }
+
+        @Override
+        public String toString() {
+            return String.format("%s input channel %d", this.isRemote() ? "remote" : "local", Math.abs(this.channelId));
+        }
     }
 
 // OutputChannelInfo
@@ -533,10 +591,12 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
         }
 
         public void startWriting() {
+            SimpleMuxableChannel.this.log.trace("%s %s %s", this, "enable", "select for write");
             SimpleMuxableChannel.this.selectFor(this.getKey(), SelectionKey.OP_WRITE, true);
         }
 
         public void stopWriting() {
+            SimpleMuxableChannel.this.log.trace("%s %s %s", this, "disable", "select for write");
             SimpleMuxableChannel.this.selectFor(this.getKey(), SelectionKey.OP_WRITE, false);
         }
 
@@ -570,6 +630,11 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
         public void close(Throwable cause) {
             SimpleMuxableChannel.this.handleMainChannelClosed(cause);
         }
+
+        @Override
+        public String toString() {
+            return "main output channel";
+        }
     }
 
 // NestedOutputChannelInfo
@@ -596,6 +661,11 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
         @Override
         public void close(Throwable cause) {
             SimpleMuxableChannel.this.handleNestedChannelClosed(this, cause);
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s output channel %d", this.isRemote() ? "remote" : "local", Math.abs(this.channelId));
         }
     }
 

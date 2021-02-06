@@ -23,7 +23,7 @@ import org.dellroad.stuff.util.LongSet;
  * <p>
  * Instances are thread safe.
  */
-public class ChannelIds {
+public class ChannelIds extends LoggingSupport {
 
     private final LongSet openChannelIds = new LongSet();           // ID's of all unclosed channels (local and remote)
 
@@ -65,6 +65,7 @@ public class ChannelIds {
             throw new IllegalStateException("channel ID's exhausted");
         final long channelId = ++this.prevLocalChannelId;
         this.openChannelIds.add(channelId);
+        this.debug("allocated new local channel %d", channelId);
         return channelId;
     }
 
@@ -102,6 +103,7 @@ public class ChannelIds {
             return false;
         this.prevRemoteChannelId++;
         this.openChannelIds.add(channelId);
+        this.debug("allocated new remote channel %d", channelId);
         return true;
     }
 
@@ -135,7 +137,10 @@ public class ChannelIds {
     public synchronized boolean freeChannelId(long channelId, boolean local) {
         if (channelId < 1)
             throw new IllegalArgumentException(String.format("invalid %s channel ID %d", local ? "local" : "remote", channelId));
-        return this.openChannelIds.remove(local ? channelId : -channelId);
+        final boolean freed = this.openChannelIds.remove(local ? channelId : -channelId);
+        if (freed)
+            this.debug("freed %s channel %d", local ? "local" : "remote", channelId);
+        return freed;
     }
 
     /**

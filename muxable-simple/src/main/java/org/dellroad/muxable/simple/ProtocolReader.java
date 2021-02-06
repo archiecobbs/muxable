@@ -18,7 +18,7 @@ import org.dellroad.muxable.Directions;
  * <p>
  * Instances are not thread safe.
  */
-public class ProtocolReader {
+public class ProtocolReader extends LoggingSupport {
 
     // Configuration setup
     private final ChannelIds channelIds;                                                // channel ID tracker
@@ -100,6 +100,7 @@ public class ProtocolReader {
 
         // Consume the data until if/when a "close connection" frame is seen
         while (data.hasRemaining()) {
+            this.trace("state %s: input data %s", this.state, this.toString(data, 64));
             if (!this.state.inputData(this, data))
                 return false;
         }
@@ -119,6 +120,7 @@ public class ProtocolReader {
 
         // Validate protocol cookie
         final long protocolCookie = this.longValue;
+        this.debug("state %s: read protocol cookie 0x%016x", this.state, protocolCookie);
         if (protocolCookie != ProtocolConstants.PROTOCOL_COOKIE) {
             throw this.violation = new ProtocolViolationException(this.longValueOffset,
               String.format("rec'd invalid protocol cookie 0x%016x != 0x%016x", protocolCookie, ProtocolConstants.PROTOCOL_COOKIE));
@@ -138,6 +140,7 @@ public class ProtocolReader {
 
         // Validate protocol version
         final long protocolVersion = this.longValue;
+        this.debug("state %s: read protocol version %d", this.state, protocolVersion);
         if (protocolVersion != ProtocolConstants.CURRENT_PROTOCOL_VERSION) {
             throw this.violation = new ProtocolViolationException(this.longValueOffset,
               String.format("rec'd unsupported protocol version %d (current is %d)",
@@ -157,6 +160,7 @@ public class ProtocolReader {
             return true;
 
         // Zero means close the whole thing down
+        this.debug("state %s: read peer's encoded channel ID %d", this.state, this.longValue);
         if (this.longValue == 0) {
             this.state = State.CLOSED;
             return false;
@@ -214,6 +218,8 @@ public class ProtocolReader {
             throw this.violation = new ProtocolViolationException(this.longValueOffset,
               String.format("rec'd invalid frame: invalid flags byte 0x%02x", flags & 0xff));
         }
+        this.debug("state %s: for new remote channel %d is %s",
+          this.state, this.payloadChannelId, this.newChannelDirections);
 
         // Proceed
         this.state = State.READING_PAYLOAD_LENGTH;
@@ -228,6 +234,9 @@ public class ProtocolReader {
             return true;
 
         // Check value is within range
+        this.debug("state %s: read length %d for %s on %s channel %d", this.state,
+          this.longValue, this.newChannelRequest ? "requestData" : "payload",
+          this.payloadChannelIdIsLocal ? "local" : "remote", this.payloadChannelId);
         if (this.longValue < 0 || this.longValue > Integer.MAX_VALUE) {
             throw this.violation = new ProtocolViolationException(this.longValueOffset,
               String.format("rec'd frame on %s channel %d with invalid payload length %d",
@@ -239,6 +248,8 @@ public class ProtocolReader {
         if (!this.newChannelRequest && payloadLength == 0) {
 
             // Deallocate channel
+            this.debug("state %s: closing %s channel %d", this.state,
+              this.payloadChannelIdIsLocal ? "local" : "remote", this.payloadChannelId);
             this.channelIds.freeChannelId(this.payloadChannelId, this.payloadChannelIdIsLocal);
 
             // Notify input handler
@@ -251,6 +262,8 @@ public class ProtocolReader {
             }
 
             // Read the next frame
+            this.debug("state %s: closed %s channel %d", this.state,
+              this.payloadChannelIdIsLocal ? "local" : "remote", this.payloadChannelId);
             this.state = State.READING_CHANNEL_ID;
             return true;
         }
@@ -297,6 +310,10 @@ public class ProtocolReader {
 
     // Deliver completed payload to input handler
     private void deliverPayload(ByteBuffer payload) throws IOException {
+
+        // Debug
+        this.debug("state %s: deliver %d byte payload from %s channel %d", this.state,
+          payload.remaining(), this.payloadChannelIdIsLocal ? "local" : "remote", this.payloadChannelId);
 
         // Check whether channel is still open, and if so deliver payload to handler
         final long encodedChannelId = this.getEncodedChannelId();

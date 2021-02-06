@@ -18,7 +18,7 @@ import org.dellroad.muxable.Directions;
  * <p>
  * Instances are not thread safe.
  */
-public class ProtocolWriter {
+public class ProtocolWriter extends LoggingSupport {
 
     private final ChannelIds channelIds;                                        // channel ID tracker
     private final OutputHandler outputHandler;                                  // how we send bytes to the other side
@@ -220,13 +220,17 @@ public class ProtocolWriter {
             default:
                 throw new RuntimeException("internal error");
             }
+            header.flip();
 
             // Send header
-            this.outputHandler.sendOutput((ByteBuffer)header.flip());
+            this.debug("send header %s", this.toString(header, Integer.MAX_VALUE));
+            this.outputHandler.sendOutput(header);
 
             // Send payload
-            if (payload != null && payload.hasRemaining())
+            if (payload != null && payload.hasRemaining()) {
+                this.debug("send payload %s", this.toString(payload, 64));
                 this.outputHandler.sendOutput(payload);
+            }
         } finally {
             this.reentrantHandler = false;
         }
