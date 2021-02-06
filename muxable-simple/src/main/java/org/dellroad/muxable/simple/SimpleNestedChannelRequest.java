@@ -30,16 +30,16 @@ public class SimpleNestedChannelRequest implements NestedChannelRequest {
      * @param input nested channel input provided by {@code parent}
      * @param output nested channel output provided by {@code parent}
      * @param requestData nested channel request data
-     * @throws IllegalArgumentException if any parameter is null
+     * @throws IllegalArgumentException if {@code parent} is null
+     * @throws IllegalArgumentException if {@code input} and {@code output} are both null
+     * @throws IllegalArgumentException if {@code requestData} is null
      */
     public SimpleNestedChannelRequest(MuxableChannel parent,
       ReadableByteChannel input, WritableByteChannel output, ByteBuffer requestData) {
         if (parent == null)
             throw new IllegalArgumentException("null parent");
-        if (input == null)
-            throw new IllegalArgumentException("null input");
-        if (output == null)
-            throw new IllegalArgumentException("null output");
+        if (input == null && output == null)
+            throw new IllegalArgumentException("null input and output");
         if (requestData == null)
             throw new IllegalArgumentException("null requestData");
         this.parent = parent;
