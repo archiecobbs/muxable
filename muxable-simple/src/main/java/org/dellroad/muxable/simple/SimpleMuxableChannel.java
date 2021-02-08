@@ -40,8 +40,8 @@ import org.dellroad.stuff.util.LongMap;
  * After the initial connection, each side transmits a {@linkplain ProtocolConstants#PROTOCOL_COOKIE protocol cookie}
  * followed its {@linkplain ProtocolConstants#CURRENT_PROTOCOL_VERSION current protocol version}. Once so established,
  * the protocol simply consists of <b>frames</b> being sent back and forth. A frame consists of a <b>channel ID</b>,
- * a <b>payload length</b>, and finally the <b>payload content</b>. The channel ID and length values are encoded
- * via {@link io.permazen.util.LongEncoder}.
+ * an optional <b>flags byte</b>, a <b>payload length</b>, and finally the <b>payload content</b>. The channel ID and
+ * length values are encoded via {@link io.permazen.util.LongEncoder}.
  *
  * <p>
  * The channel ID is negated by the sender for channels created by the receiver; this way, the receiver can differentiate
@@ -51,16 +51,17 @@ import org.dellroad.stuff.util.LongMap;
  * <p>
  * Each side keeps track of which channel ID's have been allocated (by either side). Reception of a remote channel ID
  * that is equal to the next available remote channel ID means the remote side is requesting to open a new nested channel;
- * the subsequent payload becomes the data associated with the request, and an extra flag byte is sent after the channel ID
- * indicating the {@link Directions} for the new nested channel.
+ * the subsequent payload becomes the data associated with the request, and a flag byte is sent after the channel ID
+ * specifying the {@link Directions} for the new nested channel.
  *
  * <p>
- * Reception of zero length payload implies closing the associated nested channel. Closing a nested channel always means
- * closing both directions.
+ * Reception of zero length payload implies closing the associated nested channel (however, this does not apply to the
+ * initial frame that opens a new channel, as it's possible to request opening a new channel with zero bytes of
+ * request data). Closing a nested channel always means closing both directions.
  *
  * <p>
- * Note that it's possible for one side to receive data on a nested channel that it has already closed, because the data
- * may have been sent prior to the remote side receiving the close notification.
+ * Note that it's possible for one side to receive data on a nested channel that it has already closed, because that data
+ * may have been sent prior to the remote side receiving the local side's close notification. Such data is discarded.
  *
  * <p>
  * <b>Java NIO</b>
