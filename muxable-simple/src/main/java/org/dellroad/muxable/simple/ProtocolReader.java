@@ -327,6 +327,9 @@ public class ProtocolReader extends LoggingSupport {
             } finally {
                 this.reentrantHandler = false;
             }
+        } else {
+            this.debug("state %s: discarding %d byte payload on closed %s channel %d", this.state,
+              payload.remaining(), this.payloadChannelIdIsLocal ? "local" : "remote", this.payloadChannelId);
         }
 
         // Reset state and start reading the next frame
