@@ -1,5 +1,5 @@
 # muxable
-Java API for multiplexing multiple channels over a single parent channel using Java NIO 
+Java API for multiplexing multiple channels over a single parent channel using Java NIO
 
 The **[muxable-api](https://archiecobbs.github.io/muxable/site/apidocs/index.html?org/dellroad/muxable/MuxableChannel.html)** module defines a API by which multiple independent "nested" channels are multiplexed over a single, bidirectional byte-oriented parent channel. The "nested" channels are first class NIO channels that can be used completely independently from each another, but they are scoped to the parent channel.
 
