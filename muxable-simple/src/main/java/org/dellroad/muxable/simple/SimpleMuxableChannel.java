@@ -67,9 +67,9 @@ import org.dellroad.stuff.util.LongMap;
  * <b>Java NIO</b>
  *
  * <p>
- * This is a Java NIO based implementation. The underlying channel(s) must be {@link SelectableChannel}s
- * and (for now) use the default {@link SelectorProvider}. The nested channels returned by this class will
- * use same {@link SelectorProvider} as the underlying channel(s).
+ * This is a Java NIO based implementation. The underlying channel(s) must be {@link SelectableChannel}s, and the
+ * nested channels returned by this class will use the {@link SelectorProvider} given to the constructor (by default,
+ * the one associated with the input channel).
  *
  * <p>
  * Because an internal service thread is created, instances must be explicitly {@link #start}'d before use
@@ -143,7 +143,7 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
 // Constructors
 
     /**
-     * Constructor taking a single, bi-directional {@link ByteChannel}.
+     * Constructor taking a single, bi-directional {@link ByteChannel}, and using the default {@link SelectorProvider}.
      *
      * <p>
      * Although it's not enforced by the parameter type, the given {@code channel} must subclass {@link SelectableChannel}.
@@ -153,11 +153,11 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
      * @throws IllegalArgumentException if {@code channel} is not a {@link SelectableChannel}
      */
     public SimpleMuxableChannel(ByteChannel channel) {
-        this(channel, channel);
+        this(SelectorProvider.provider(), channel, channel);
     }
 
     /**
-     * Primary constructor.
+     * Constructor using the default {@link SelectorProvider}.
      *
      * <p>
      * Although it's not enforced by the parameter types, the given {@code input} and {@code output} must subclass
@@ -168,7 +168,24 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
      * @throws IllegalArgumentException if either channel is not a {@link SelectableChannel}
      */
     public SimpleMuxableChannel(ReadableByteChannel input, WritableByteChannel output) {
-        //super(input.provider());          - TODO with newer dellroad-stuff
+        this(input instanceof SelectableChannel ? ((SelectableChannel)input).provider() : null, input, output);
+    }
+
+    /**
+     * Primary constructor.
+     *
+     * <p>
+     * Although it's not enforced by the parameter types, the given {@code input} and {@code output} must subclass
+     * {@link SelectableChannel}.
+     *
+     * @param provider the {@link SelectorProvider} that this instance will use
+     * @param input channel receiving input from the remote side
+     * @param output channel taking output from the local side
+     * @throws IllegalArgumentException if {@code provider} is null
+     * @throws IllegalArgumentException if either channel is not a {@link SelectableChannel}
+     */
+    public SimpleMuxableChannel(SelectorProvider provider, ReadableByteChannel input, WritableByteChannel output) {
+        super(provider);
         if (!(input instanceof SelectableChannel))
             throw new IllegalArgumentException("input is not a SelectableChannel");
         if (!(output instanceof SelectableChannel))
@@ -361,14 +378,10 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
         // Debug
         this.log.info("opening new %s %s channel %d", directions, channelId < 0 ? "remote" : "local", Math.abs(channelId));
 
-        // Initialize
-        //final SelectorProvider provider = this.provider;              - TODO with newer dellroad-stuff
-        final SelectorProvider provider = SelectorProvider.provider();
-
         // Create channel for local <- peer data flow
         final ReadableByteChannel inputChannel;
         if (directions.hasInput()) {
-            final Pipe pipe = provider.openPipe();
+            final Pipe pipe = this.provider.openPipe();
             inputChannel = pipe.source();
             final NestedOutputChannelInfo nestedOutput = new NestedOutputChannelInfo(pipe.sink(), channelId);
             this.nestedOutputMap.put(channelId, nestedOutput);
@@ -378,7 +391,7 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
         // Create channel for local -> peer data flow
         final WritableByteChannel outputChannel;
         if (directions.hasOutput()) {
-            final Pipe pipe = provider.openPipe();
+            final Pipe pipe = this.provider.openPipe();
             outputChannel = pipe.sink();
             final NestedInputChannelInfo nestedInput = new NestedInputChannelInfo(pipe.source(), channelId);
             this.nestedInputMap.put(channelId, nestedInput);

@@ -48,7 +48,7 @@
         <checkstyle.config.location>src/checkstyle/checkstyle.xml</checkstyle.config.location>
 
         <!-- Dependency versions -->
-        <dellroad-stuff.version>2.4.6</dellroad-stuff.version>
+        <dellroad-stuff.version>2.4.7</dellroad-stuff.version>
         <findbugs.version>3.0.2</findbugs.version>
         <log4j.version>1.2.17</log4j.version>
         <permazen.version>4.1.7</permazen.version>
