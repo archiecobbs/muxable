@@ -9,7 +9,7 @@ package org.dellroad.muxable.simple;
  * Exception thrown when a {@link SimpleMuxableChannel} framing protocol violation is detected.
  *
  * <p>
- * This should never occur unless the remote side violating the framing protocol (i.e., has a bug).
+ * This should never occur unless the remote side is violating the framing protocol (i.e., has a bug).
  */
 public class ProtocolViolationException extends IllegalArgumentException {
 

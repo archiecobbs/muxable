@@ -45,8 +45,8 @@ import org.dellroad.stuff.util.LongMap;
  *
  * <p>
  * The channel ID is negated by the sender for channels created by the receiver; this way, the receiver can differentiate
- * a local channel ID (negative) from a remote channel ID (positive). A channel ID of zero means to immediately close
- * the entire connection.
+ * a local channel ID (negative) from a remote channel ID (positive). Reception of a frame with a channel ID of zero means
+ * to immediately close the entire parent connection.
  *
  * <p>
  * Each side keeps track of which channel ID's have been allocated (by either side). Reception of a remote channel ID
