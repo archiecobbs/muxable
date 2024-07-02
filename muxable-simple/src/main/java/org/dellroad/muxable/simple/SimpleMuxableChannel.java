@@ -37,7 +37,7 @@ import org.dellroad.stuff.util.LongMap;
  *
  * <p>
  * After the initial connection, each side transmits a {@linkplain ProtocolConstants#PROTOCOL_COOKIE protocol cookie}
- * followed its {@linkplain ProtocolConstants#CURRENT_PROTOCOL_VERSION current protocol version}. Once so established,
+ * followed by its {@linkplain ProtocolConstants#CURRENT_PROTOCOL_VERSION current protocol version}. Once so established,
  * the protocol simply consists of <b>frames</b> being sent back and forth. A frame consists of a <b>channel ID</b>,
  * an optional <b>flags byte</b>, a <b>payload length</b>, and finally the <b>payload content</b>. The channel ID and
  * length values are encoded via {@link io.permazen.util.LongEncoder}.
@@ -55,7 +55,7 @@ import org.dellroad.stuff.util.LongMap;
  *
  * <p>
  * Reception of zero length payload implies closing the associated nested channel (however, this does not apply to the
- * initial frame that opens a new channel, as it's possible to request opening a new channel with zero bytes of
+ * initial frame that opens a new channel, so it's possible to request opening a new channel with zero bytes of
  * request data). Closing a nested channel always means closing both directions.
  *
  * <p>
