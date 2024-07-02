@@ -73,7 +73,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../MuxableChannel.html" title="interface in org.dellroad.muxable">MuxableChannel</a></code></div>
+<div class="col-first even-row-color"><code><a href="../MuxableChannel.html" title="interface in org.dellroad.muxable">MuxableChannel</a>&lt;<a href="../NestedChannelRequest.html" title="type parameter in NestedChannelRequest">I</a>,<wbr><a href="../NestedChannelRequest.html" title="type parameter in NestedChannelRequest">O</a>&gt;</code></div>
 <div class="col-second even-row-color"><span class="type-name-label">NestedChannelRequest.</span><code><a href="../NestedChannelRequest.html#getParent()" class="member-name-link">getParent</a>()</code></div>
 <div class="col-last even-row-color">
 <div class="block">Get the parent <a href="../MuxableChannel.html" title="interface in org.dellroad.muxable"><code>MuxableChannel</code></a>.</div>
@@ -96,13 +96,22 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/ByteChannel.html" title="class or interface in java.nio.channels" class="external-link"><code>ByteChannel</code></a> (or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/ReadableByteChannel.html" title="class or interface in java.nio.channels" class="external-link"><code>ReadableByteChannel</code></a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/WritableByteChannel.html" title="class or interface in java.nio.channels" class="external-link"><code>WritableByteChannel</code></a> pair) using a simple framing protocol.</div>
 </div>
 </div>
+<div class="caption"><span>Fields in <a href="../simple/package-summary.html">org.dellroad.muxable.simple</a> declared as <a href="../MuxableChannel.html" title="interface in org.dellroad.muxable">MuxableChannel</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>protected final <a href="../MuxableChannel.html" title="interface in org.dellroad.muxable">MuxableChannel</a>&lt;<a href="../simple/DefaultNestedChannelRequest.html" title="type parameter in DefaultNestedChannelRequest">I</a>,<wbr><a href="../simple/DefaultNestedChannelRequest.html" title="type parameter in DefaultNestedChannelRequest">O</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DefaultNestedChannelRequest.</span><code><a href="../simple/DefaultNestedChannelRequest.html#parent" class="member-name-link">parent</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
 <div class="caption"><span>Methods in <a href="../simple/package-summary.html">org.dellroad.muxable.simple</a> that return <a href="../MuxableChannel.html" title="interface in org.dellroad.muxable">MuxableChannel</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../MuxableChannel.html" title="interface in org.dellroad.muxable">MuxableChannel</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SimpleNestedChannelRequest.</span><code><a href="../simple/SimpleNestedChannelRequest.html#getParent()" class="member-name-link">getParent</a>()</code></div>
+<div class="col-first even-row-color"><code><a href="../MuxableChannel.html" title="interface in org.dellroad.muxable">MuxableChannel</a>&lt;<a href="../simple/DefaultNestedChannelRequest.html" title="type parameter in DefaultNestedChannelRequest">I</a>,<wbr><a href="../simple/DefaultNestedChannelRequest.html" title="type parameter in DefaultNestedChannelRequest">O</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DefaultNestedChannelRequest.</span><code><a href="../simple/DefaultNestedChannelRequest.html#getParent()" class="member-name-link">getParent</a>()</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 <div class="caption"><span>Constructors in <a href="../simple/package-summary.html">org.dellroad.muxable.simple</a> with parameters of type <a href="../MuxableChannel.html" title="interface in org.dellroad.muxable">MuxableChannel</a></span></div>
@@ -111,18 +120,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../simple/SimpleNestedChannelRequest.html#%3Cinit%3E(org.dellroad.muxable.MuxableChannel,java.nio.channels.Pipe,java.nio.ByteBuffer)" class="member-name-link">SimpleNestedChannelRequest</a><wbr>(<a href="../MuxableChannel.html" title="interface in org.dellroad.muxable">MuxableChannel</a>&nbsp;parent,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/Pipe.html" title="class or interface in java.nio.channels" class="external-link">Pipe</a>&nbsp;pipe,
+<div class="col-second even-row-color"><code><a href="../simple/DefaultNestedChannelRequest.html#%3Cinit%3E(org.dellroad.muxable.MuxableChannel,I,O,java.nio.ByteBuffer)" class="member-name-link">DefaultNestedChannelRequest</a><wbr>(<a href="../MuxableChannel.html" title="interface in org.dellroad.muxable">MuxableChannel</a>&lt;<a href="../simple/DefaultNestedChannelRequest.html" title="type parameter in DefaultNestedChannelRequest">I</a>,<wbr><a href="../simple/DefaultNestedChannelRequest.html" title="type parameter in DefaultNestedChannelRequest">O</a>&gt;&nbsp;parent,
+ <a href="../simple/DefaultNestedChannelRequest.html" title="type parameter in DefaultNestedChannelRequest">I</a>&nbsp;input,
+ <a href="../simple/DefaultNestedChannelRequest.html" title="type parameter in DefaultNestedChannelRequest">O</a>&nbsp;output,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;requestData)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Convenience constructor for when the nested channel I/O is accessed via a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/Pipe.html" title="class or interface in java.nio.channels" class="external-link"><code>Pipe</code></a>.</div>
-</div>
-<div class="col-first odd-row-color"><code>&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../simple/SimpleNestedChannelRequest.html#%3Cinit%3E(org.dellroad.muxable.MuxableChannel,java.nio.channels.ReadableByteChannel,java.nio.channels.WritableByteChannel,java.nio.ByteBuffer)" class="member-name-link">SimpleNestedChannelRequest</a><wbr>(<a href="../MuxableChannel.html" title="interface in org.dellroad.muxable">MuxableChannel</a>&nbsp;parent,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/ReadableByteChannel.html" title="class or interface in java.nio.channels" class="external-link">ReadableByteChannel</a>&nbsp;input,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/WritableByteChannel.html" title="class or interface in java.nio.channels" class="external-link">WritableByteChannel</a>&nbsp;output,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;requestData)</code></div>
-<div class="col-last odd-row-color">
 <div class="block">Constructor.</div>
 </div>
 </div>

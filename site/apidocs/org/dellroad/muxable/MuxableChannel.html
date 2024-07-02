@@ -69,9 +69,14 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">org.dellroad.muxable</a></div>
-<h1 title="Interface MuxableChannel" class="title">Interface MuxableChannel</h1>
+<h1 title="Interface MuxableChannel" class="title">Interface MuxableChannel&lt;I extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/SelectableChannel.html" title="class or interface in java.nio.channels" class="external-link">SelectableChannel</a> &amp; <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/ReadableByteChannel.html" title="class or interface in java.nio.channels" class="external-link">ReadableByteChannel</a>,<wbr>O extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/SelectableChannel.html" title="class or interface in java.nio.channels" class="external-link">SelectableChannel</a> &amp; <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/WritableByteChannel.html" title="class or interface in java.nio.channels" class="external-link">WritableByteChannel</a>&gt;</h1>
 </div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>Type Parameters:</dt>
+<dd><code>I</code> - input channel type</dd>
+<dd><code>O</code> - output channel type</dd>
+</dl>
 <dl class="notes">
 <dt>All Superinterfaces:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/Channel.html" title="class or interface in java.nio.channels" class="external-link">Channel</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a></code></dd>
@@ -81,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="simple/SimpleMuxableChannel.html" title="class in org.dellroad.muxable.simple">SimpleMuxableChannel</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">MuxableChannel</span><span class="extends-implements">
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">MuxableChannel&lt;I extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/SelectableChannel.html" title="class or interface in java.nio.channels" class="external-link">SelectableChannel</a> &amp; <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/ReadableByteChannel.html" title="class or interface in java.nio.channels" class="external-link">ReadableByteChannel</a>,<wbr>O extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/SelectableChannel.html" title="class or interface in java.nio.channels" class="external-link">SelectableChannel</a> &amp; <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/WritableByteChannel.html" title="class or interface in java.nio.channels" class="external-link">WritableByteChannel</a>&gt;</span><span class="extends-implements">
 extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/Channel.html" title="class or interface in java.nio.channels" class="external-link">Channel</a></span></div>
 <div class="block">A single channel supporting parallel nested byte-oriented channels operating independently.
 
@@ -133,17 +138,17 @@ extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/ja
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Close this instance.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/BlockingQueue.html" title="class or interface in java.util.concurrent" class="external-link">BlockingQueue</a>&lt;<a href="NestedChannelRequest.html" title="interface in org.dellroad.muxable">NestedChannelRequest</a>&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/BlockingQueue.html" title="class or interface in java.util.concurrent" class="external-link">BlockingQueue</a>&lt;? extends <a href="NestedChannelRequest.html" title="interface in org.dellroad.muxable">NestedChannelRequest</a>&lt;<a href="MuxableChannel.html" title="type parameter in MuxableChannel">I</a>,<wbr><a href="MuxableChannel.html" title="type parameter in MuxableChannel">O</a>&gt;&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getNestedChannelRequests()" class="member-name-link">getNestedChannelRequests</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Access the queue of incoming <a href="NestedChannelRequest.html" title="interface in org.dellroad.muxable"><code>NestedChannelRequest</code></a>s initiated from the remote side.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="NestedChannelRequest.html" title="interface in org.dellroad.muxable">NestedChannelRequest</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="NestedChannelRequest.html" title="interface in org.dellroad.muxable">NestedChannelRequest</a>&lt;<a href="MuxableChannel.html" title="type parameter in MuxableChannel">I</a>,<wbr><a href="MuxableChannel.html" title="type parameter in MuxableChannel">O</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#newNestedChannelRequest(java.nio.ByteBuffer)" class="member-name-link">newNestedChannelRequest</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;requestData)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Create a pair of nested input and output channels scoped to this instance.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="NestedChannelRequest.html" title="interface in org.dellroad.muxable">NestedChannelRequest</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="NestedChannelRequest.html" title="interface in org.dellroad.muxable">NestedChannelRequest</a>&lt;<a href="MuxableChannel.html" title="type parameter in MuxableChannel">I</a>,<wbr><a href="MuxableChannel.html" title="type parameter in MuxableChannel">O</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#newNestedChannelRequest(java.nio.ByteBuffer,org.dellroad.muxable.Directions)" class="member-name-link">newNestedChannelRequest</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;requestData,
  <a href="Directions.html" title="enum class in org.dellroad.muxable">Directions</a>&nbsp;directions)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
@@ -169,9 +174,9 @@ extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/ja
 <li>
 <section class="detail" id="newNestedChannelRequest(java.nio.ByteBuffer,org.dellroad.muxable.Directions)">
 <h3>newNestedChannelRequest</h3>
-<div class="member-signature"><span class="return-type"><a href="NestedChannelRequest.html" title="interface in org.dellroad.muxable">NestedChannelRequest</a></span>&nbsp;<span class="element-name">newNestedChannelRequest</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;requestData,
+<div class="member-signature"><span class="return-type"><a href="NestedChannelRequest.html" title="interface in org.dellroad.muxable">NestedChannelRequest</a>&lt;<a href="MuxableChannel.html" title="type parameter in MuxableChannel">I</a>,<wbr><a href="MuxableChannel.html" title="type parameter in MuxableChannel">O</a>&gt;</span>&nbsp;<span class="element-name">newNestedChannelRequest</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;requestData,
  <a href="Directions.html" title="enum class in org.dellroad.muxable">Directions</a>&nbsp;directions)</span>
-                                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+                                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Create a new nested channel, or pair of nested channels, scoped to this instance.
 
  <p>
@@ -194,8 +199,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/ja
 <li>
 <section class="detail" id="newNestedChannelRequest(java.nio.ByteBuffer)">
 <h3>newNestedChannelRequest</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="NestedChannelRequest.html" title="interface in org.dellroad.muxable">NestedChannelRequest</a></span>&nbsp;<span class="element-name">newNestedChannelRequest</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;requestData)</span>
-                                              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="NestedChannelRequest.html" title="interface in org.dellroad.muxable">NestedChannelRequest</a>&lt;<a href="MuxableChannel.html" title="type parameter in MuxableChannel">I</a>,<wbr><a href="MuxableChannel.html" title="type parameter in MuxableChannel">O</a>&gt;</span>&nbsp;<span class="element-name">newNestedChannelRequest</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;requestData)</span>
+                                                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Create a pair of nested input and output channels scoped to this instance.
 
  <p>
@@ -214,7 +219,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/ja
 <li>
 <section class="detail" id="getNestedChannelRequests()">
 <h3>getNestedChannelRequests</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/BlockingQueue.html" title="class or interface in java.util.concurrent" class="external-link">BlockingQueue</a>&lt;<a href="NestedChannelRequest.html" title="interface in org.dellroad.muxable">NestedChannelRequest</a>&gt;</span>&nbsp;<span class="element-name">getNestedChannelRequests</span>()</div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/BlockingQueue.html" title="class or interface in java.util.concurrent" class="external-link">BlockingQueue</a>&lt;? extends <a href="NestedChannelRequest.html" title="interface in org.dellroad.muxable">NestedChannelRequest</a>&lt;<a href="MuxableChannel.html" title="type parameter in MuxableChannel">I</a>,<wbr><a href="MuxableChannel.html" title="type parameter in MuxableChannel">O</a>&gt;&gt;</span>&nbsp;<span class="element-name">getNestedChannelRequests</span>()</div>
 <div class="block">Access the queue of incoming <a href="NestedChannelRequest.html" title="interface in org.dellroad.muxable"><code>NestedChannelRequest</code></a>s initiated from the remote side.
 
  <p>
@@ -222,13 +227,14 @@ extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/ja
  <a href="#newNestedChannelRequest(java.nio.ByteBuffer,org.dellroad.muxable.Directions)"><code>newNestedChannelRequest()</code></a>. Moreover, the order of requests is preserved.
 
  <p>
- Because the remote side can close a nested channel at any time, it is possible that a <a href="NestedChannelRequest.html" title="interface in org.dellroad.muxable"><code>NestedChannelRequest</code></a>
- is already closed by the time it's pulled from this queue. In this case, the input and output channels
- will throw <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link"><code>IOException</code></a> on first access.
+ Because the remote side can close a nested channel at any time, it is possible that the new channel associated
+ with an incoming <a href="NestedChannelRequest.html" title="interface in org.dellroad.muxable"><code>NestedChannelRequest</code></a> has already been closed in a subsequent message from the remote peer
+ by the time the original <a href="NestedChannelRequest.html" title="interface in org.dellroad.muxable"><code>NestedChannelRequest</code></a> is pulled from this queue. In such a case, the nested channel's
+ input and output streams will throw <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link"><code>IOException</code></a> on first access.
 
  <p>
  Note: no special change happens to the returned <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/BlockingQueue.html" title="class or interface in java.util.concurrent" class="external-link"><code>BlockingQueue</code></a> once this instance is closed;
- instead, new reqeusts simply stop appearing. Therefore, after closing this instance, any thread(s)
+ instead, new requests simply stop appearing. Therefore, after closing this instance, any thread(s)
  that are blocked polling for new data may need to be woken up via <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Thread.html#interrupt()" title="class or interface in java.lang" class="external-link"><code>Thread.interrupt()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>

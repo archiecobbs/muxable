@@ -71,16 +71,29 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Tracks channel ID's for the <a href="SimpleMuxableChannel.html" title="class in org.dellroad.muxable.simple"><code>SimpleMuxableChannel</code></a> framing protocol.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/LoggingSupport.html#org.dellroad.muxable.simple">LoggingSupport</a></div>
+<div class="col-first odd-row-color"><a href="class-use/DefaultNestedChannelRequest.html#org.dellroad.muxable.simple">DefaultNestedChannelRequest</a></div>
 <div class="col-last odd-row-color">
+<div class="block">A straightforward implementation of the <a href="../NestedChannelRequest.html" title="interface in org.dellroad.muxable"><code>NestedChannelRequest</code></a> interface.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/LoggingSupport.html#org.dellroad.muxable.simple">LoggingSupport</a></div>
+<div class="col-last even-row-color">
 <div class="block">Debug logging support class.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/ProtocolReader.InputHandler.html#org.dellroad.muxable.simple">ProtocolReader.InputHandler</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/ProtocolReader.InputHandler.html#org.dellroad.muxable.simple">ProtocolReader.InputHandler</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Callback interface invoked by a <a href="ProtocolReader.html" title="class in org.dellroad.muxable.simple"><code>ProtocolReader</code></a>.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/ProtocolWriter.OutputHandler.html#org.dellroad.muxable.simple">ProtocolWriter.OutputHandler</a></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><a href="class-use/ProtocolWriter.OutputHandler.html#org.dellroad.muxable.simple">ProtocolWriter.OutputHandler</a></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><a href="class-use/SimpleMuxableChannel.html#org.dellroad.muxable.simple">SimpleMuxableChannel</a></div>
+<div class="col-last odd-row-color">
+<div class="block">An implementation of the <a href="../MuxableChannel.html" title="interface in org.dellroad.muxable"><code>MuxableChannel</code></a> interface that multiplexes nested channels over a single underlying
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/ByteChannel.html" title="class or interface in java.nio.channels" class="external-link"><code>ByteChannel</code></a> (or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/ReadableByteChannel.html" title="class or interface in java.nio.channels" class="external-link"><code>ReadableByteChannel</code></a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/WritableByteChannel.html" title="class or interface in java.nio.channels" class="external-link"><code>WritableByteChannel</code></a> pair) using a simple framing protocol.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/SimpleNestedChannelRequest.html#org.dellroad.muxable.simple">SimpleNestedChannelRequest</a></div>
+<div class="col-last even-row-color">
+<div class="block"><a href="../NestedChannelRequest.html" title="interface in org.dellroad.muxable"><code>NestedChannelRequest</code></a> implementation used by <a href="SimpleMuxableChannel.html" title="class in org.dellroad.muxable.simple"><code>SimpleMuxableChannel</code></a>.</div>
+</div>
 </div>
 </section>
 </li>

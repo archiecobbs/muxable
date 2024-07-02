@@ -69,22 +69,40 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">org.dellroad.muxable</a></div>
-<h1 title="Interface NestedChannelRequest" class="title">Interface NestedChannelRequest</h1>
+<h1 title="Interface NestedChannelRequest" class="title">Interface NestedChannelRequest&lt;I extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/SelectableChannel.html" title="class or interface in java.nio.channels" class="external-link">SelectableChannel</a> &amp; <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/ReadableByteChannel.html" title="class or interface in java.nio.channels" class="external-link">ReadableByteChannel</a>,<wbr>O extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/SelectableChannel.html" title="class or interface in java.nio.channels" class="external-link">SelectableChannel</a> &amp; <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/WritableByteChannel.html" title="class or interface in java.nio.channels" class="external-link">WritableByteChannel</a>&gt;</h1>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
+<dt>Type Parameters:</dt>
+<dd><code>I</code> - input channel type</dd>
+<dd><code>O</code> - output channel type</dd>
+</dl>
+<dl class="notes">
 <dt>All Known Implementing Classes:</dt>
-<dd><code><a href="simple/SimpleNestedChannelRequest.html" title="class in org.dellroad.muxable.simple">SimpleNestedChannelRequest</a></code></dd>
+<dd><code><a href="simple/DefaultNestedChannelRequest.html" title="class in org.dellroad.muxable.simple">DefaultNestedChannelRequest</a></code>, <code><a href="simple/SimpleNestedChannelRequest.html" title="class in org.dellroad.muxable.simple">SimpleNestedChannelRequest</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">NestedChannelRequest</span></div>
-<div class="block">Represents a nested channel within a <a href="MuxableChannel.html" title="interface in org.dellroad.muxable"><code>MuxableChannel</code></a>.
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">NestedChannelRequest&lt;I extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/SelectableChannel.html" title="class or interface in java.nio.channels" class="external-link">SelectableChannel</a> &amp; <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/ReadableByteChannel.html" title="class or interface in java.nio.channels" class="external-link">ReadableByteChannel</a>,<wbr>O extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/SelectableChannel.html" title="class or interface in java.nio.channels" class="external-link">SelectableChannel</a> &amp; <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/WritableByteChannel.html" title="class or interface in java.nio.channels" class="external-link">WritableByteChannel</a>&gt;</span></div>
+<div class="block">Represents a request from one end of a <a href="MuxableChannel.html" title="interface in org.dellroad.muxable"><code>MuxableChannel</code></a> to the other to create a new nested channel.
+
+ <p>
+ Instances provide access to the input and output I/O streams associated with the new nested channel, as well
+ any application-specific <code>byte[]</code> data associated with the request by the initiator.
 
  <p>
  The <a href="#getInput()">input</a> and <a href="#getOutput()">output</a> function independently, but they are
  considered part of the same connected nested channel. Unlike TCP sockets, they do not support shutting
  down only one direction: closing either <a href="#getInput()">input</a> or <a href="#getOutput()">output</a>
  results in both channels being closed.</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list-long">
+<li><a href="MuxableChannel.html#newNestedChannelRequest(java.nio.ByteBuffer,org.dellroad.muxable.Directions)"><code>MuxableChannel.newNestedChannelRequest()</code></a></li>
+<li><a href="MuxableChannel.html#getNestedChannelRequests()"><code>MuxableChannel.getNestedChannelRequests()</code></a></li>
+</ul>
+</dd>
+</dl>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -99,17 +117,17 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/ReadableByteChannel.html" title="class or interface in java.nio.channels" class="external-link">ReadableByteChannel</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="NestedChannelRequest.html" title="type parameter in NestedChannelRequest">I</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getInput()" class="member-name-link">getInput</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Get the input channel, if any.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/WritableByteChannel.html" title="class or interface in java.nio.channels" class="external-link">WritableByteChannel</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="NestedChannelRequest.html" title="type parameter in NestedChannelRequest">O</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getOutput()" class="member-name-link">getOutput</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Get the output channel, if any.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="MuxableChannel.html" title="interface in org.dellroad.muxable">MuxableChannel</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="MuxableChannel.html" title="interface in org.dellroad.muxable">MuxableChannel</a>&lt;<a href="NestedChannelRequest.html" title="type parameter in NestedChannelRequest">I</a>,<wbr><a href="NestedChannelRequest.html" title="type parameter in NestedChannelRequest">O</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getParent()" class="member-name-link">getParent</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Get the parent <a href="MuxableChannel.html" title="interface in org.dellroad.muxable"><code>MuxableChannel</code></a>.</div>
@@ -136,7 +154,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getParent()">
 <h3>getParent</h3>
-<div class="member-signature"><span class="return-type"><a href="MuxableChannel.html" title="interface in org.dellroad.muxable">MuxableChannel</a></span>&nbsp;<span class="element-name">getParent</span>()</div>
+<div class="member-signature"><span class="return-type"><a href="MuxableChannel.html" title="interface in org.dellroad.muxable">MuxableChannel</a>&lt;<a href="NestedChannelRequest.html" title="type parameter in NestedChannelRequest">I</a>,<wbr><a href="NestedChannelRequest.html" title="type parameter in NestedChannelRequest">O</a>&gt;</span>&nbsp;<span class="element-name">getParent</span>()</div>
 <div class="block">Get the parent <a href="MuxableChannel.html" title="interface in org.dellroad.muxable"><code>MuxableChannel</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -159,11 +177,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getInput()">
 <h3>getInput</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/ReadableByteChannel.html" title="class or interface in java.nio.channels" class="external-link">ReadableByteChannel</a></span>&nbsp;<span class="element-name">getInput</span>()</div>
+<div class="member-signature"><span class="return-type"><a href="NestedChannelRequest.html" title="type parameter in NestedChannelRequest">I</a></span>&nbsp;<span class="element-name">getInput</span>()</div>
 <div class="block">Get the input channel, if any. This corresponds to the output channel on the remote side.
-
- <p>
- The returned channel will typically also implement <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/InterruptibleChannel.html" title="class or interface in java.nio.channels" class="external-link"><code>InterruptibleChannel</code></a>, but that is implementation-dependent.
 
  <p>
  It's possible that the returned channel requires a non-default <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/spi/SelectorProvider.html" title="class or interface in java.nio.channels.spi" class="external-link"><code>SelectorProvider</code></a>; if so, that must be
@@ -184,11 +199,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getOutput()">
 <h3>getOutput</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/WritableByteChannel.html" title="class or interface in java.nio.channels" class="external-link">WritableByteChannel</a></span>&nbsp;<span class="element-name">getOutput</span>()</div>
+<div class="member-signature"><span class="return-type"><a href="NestedChannelRequest.html" title="type parameter in NestedChannelRequest">O</a></span>&nbsp;<span class="element-name">getOutput</span>()</div>
 <div class="block">Get the output channel, if any. This corresponds to the input channel on the remote side.
-
- <p>
- The returned channel will typically also implement <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/InterruptibleChannel.html" title="class or interface in java.nio.channels" class="external-link"><code>InterruptibleChannel</code></a>, but that is implementation-dependent.
 
  <p>
  It's possible that the returned channel requires a non-default <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/spi/SelectorProvider.html" title="class or interface in java.nio.channels.spi" class="external-link"><code>SelectorProvider</code></a>; if so, that must be
