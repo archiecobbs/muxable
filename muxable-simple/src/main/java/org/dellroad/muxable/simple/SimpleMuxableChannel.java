@@ -81,7 +81,7 @@ import org.dellroad.stuff.util.LongMap;
  * <p>
  * Instances are thread safe.
  */
-public class SimpleMuxableChannel extends SelectorSupport implements MuxableChannel {
+public class SimpleMuxableChannel extends SelectorSupport implements MuxableChannel<Pipe.SourceChannel, Pipe.SinkChannel> {
 
     private static final int MAIN_CHANNEL_INPUT_BUFFER_SIZE = (1 << 20) - 64;       // 1MB minus 64 bytes of overhead
     private static final long MAIN_CHANNEL_OUTPUT_QUEUE_FULL = (1L << 26);          // 64MB
@@ -107,7 +107,7 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
     private final LongMap<NestedOutputChannelInfo> nestedOutputMap = new LongMap<>();   // local <- peer data flow
 
     // Incoming new channel reqeusts
-    private final ArrayBlockingQueue<NestedChannelRequest> requests = new ArrayBlockingQueue<>(REQUEST_QUEUE_CAPACITY);
+    private final ArrayBlockingQueue<SimpleNestedChannelRequest> requests = new ArrayBlockingQueue<>(REQUEST_QUEUE_CAPACITY);
 
     // Framing protocol state
     private final ChannelIds channelIds = new ChannelIds();
@@ -149,9 +149,8 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
      *
      * @param channel underlying channel for both input and output
      * @throws IllegalArgumentException if {@code channel} is null
-     * @throws IllegalArgumentException if {@code channel} is not a {@link SelectableChannel}
      */
-    public SimpleMuxableChannel(ByteChannel channel) {
+    public <C extends SelectableChannel & ByteChannel> SimpleMuxableChannel(C channel) {
         this(SelectorProvider.provider(), channel, channel);
     }
 
@@ -166,8 +165,9 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
      * @param output channel taking output from the local side
      * @throws IllegalArgumentException if either channel is not a {@link SelectableChannel}
      */
-    public SimpleMuxableChannel(ReadableByteChannel input, WritableByteChannel output) {
-        this(input instanceof SelectableChannel ? ((SelectableChannel)input).provider() : null, input, output);
+    public <I extends SelectableChannel & ReadableByteChannel, O extends SelectableChannel & WritableByteChannel>
+      SimpleMuxableChannel(I input, O output) {
+        this(input != null ? input.provider() : null, input, output);
     }
 
     /**
@@ -183,12 +183,13 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
      * @throws IllegalArgumentException if {@code provider} is null
      * @throws IllegalArgumentException if either channel is not a {@link SelectableChannel}
      */
-    public SimpleMuxableChannel(SelectorProvider provider, ReadableByteChannel input, WritableByteChannel output) {
+    public <I extends SelectableChannel & ReadableByteChannel, O extends SelectableChannel & WritableByteChannel>
+      SimpleMuxableChannel(SelectorProvider provider, I input, O output) {
         super(provider);
-        if (!(input instanceof SelectableChannel))
-            throw new IllegalArgumentException("input is not a SelectableChannel");
-        if (!(output instanceof SelectableChannel))
-            throw new IllegalArgumentException("output is not a SelectableChannel");
+        if (input == null)
+            throw new IllegalArgumentException("null input");
+        if (output == null)
+            throw new IllegalArgumentException("null output");
         this.input = input;
         this.output = output;
     }
@@ -196,7 +197,7 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
 // MuxableChannel
 
     @Override
-    public synchronized NestedChannelRequest newNestedChannelRequest(ByteBuffer requestData, Directions directions)
+    public synchronized SimpleNestedChannelRequest newNestedChannelRequest(ByteBuffer requestData, Directions directions)
       throws IOException {
 
         // Sanity check
@@ -216,7 +217,7 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
     }
 
     @Override
-    public BlockingQueue<NestedChannelRequest> getNestedChannelRequests() {
+    public BlockingQueue<SimpleNestedChannelRequest> getNestedChannelRequests() {
         return this.requests;
     }
 
@@ -367,7 +368,7 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
 
 // Internal methods
 
-    private NestedChannelRequest newNestedChannel(long channelId, ByteBuffer requestData, Directions directions)
+    private SimpleNestedChannelRequest newNestedChannel(long channelId, ByteBuffer requestData, Directions directions)
       throws IOException {
 
         // Sanity check
@@ -378,7 +379,7 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
         this.log.info("opening new %s %s channel %d", directions, channelId < 0 ? "remote" : "local", Math.abs(channelId));
 
         // Create channel for local <- peer data flow
-        final ReadableByteChannel inputChannel;
+        final Pipe.SourceChannel inputChannel;
         if (directions.hasInput()) {
             final Pipe pipe = this.provider.openPipe();
             inputChannel = pipe.source();
@@ -388,7 +389,7 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
             inputChannel = null;
 
         // Create channel for local -> peer data flow
-        final WritableByteChannel outputChannel;
+        final Pipe.SinkChannel outputChannel;
         if (directions.hasOutput()) {
             final Pipe pipe = this.provider.openPipe();
             outputChannel = pipe.sink();

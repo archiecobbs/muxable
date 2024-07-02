@@ -5,28 +5,38 @@
 package org.dellroad.muxable;
 
 import java.nio.ByteBuffer;
-import java.nio.channels.InterruptibleChannel;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.SelectableChannel;
 import java.nio.channels.WritableByteChannel;
 import java.nio.channels.spi.SelectorProvider;
 
 /**
- * Represents a nested channel within a {@link MuxableChannel}.
+ * Represents a request from one end of a {@link MuxableChannel} to the other to create a new nested channel.
+ *
+ * <p>
+ * Instances provide access to the input and output I/O streams associated with the new nested channel, as well
+ * any application-specific {@code byte[]} data associated with the request by the initiator.
  *
  * <p>
  * The {@linkplain #getInput input} and {@linkplain #getOutput output} function independently, but they are
  * considered part of the same connected nested channel. Unlike TCP sockets, they do not support shutting
  * down only one direction: closing either {@linkplain #getInput input} or {@linkplain #getOutput output}
  * results in both channels being closed.
+ *
+ * @param <I> input channel type
+ * @param <O> output channel type
+ * @see MuxableChannel#newNestedChannelRequest(ByteBuffer, Directions) MuxableChannel.newNestedChannelRequest()
+ * @see MuxableChannel#getNestedChannelRequests
  */
-public interface NestedChannelRequest {
+public interface NestedChannelRequest<I extends SelectableChannel & ReadableByteChannel,
+  O extends SelectableChannel & WritableByteChannel> {
 
     /**
      * Get the parent {@link MuxableChannel}.
      *
      * @return the {@link MuxableChannel} associated with this request
      */
-    MuxableChannel getParent();
+    MuxableChannel<I, O> getParent();
 
     /**
      * Get the request data associated with this request.
@@ -38,9 +48,6 @@ public interface NestedChannelRequest {
 
     /**
      * Get the input channel, if any. This corresponds to the output channel on the remote side.
-     *
-     * <p>
-     * The returned channel will typically also implement {@link InterruptibleChannel}, but that is implementation-dependent.
      *
      * <p>
      * It's possible that the returned channel requires a non-default {@link SelectorProvider}; if so, that must be
@@ -55,13 +62,10 @@ public interface NestedChannelRequest {
      *
      * @return the input channel associated with this instance, or null if this instance was created with only an output channel
      */
-    ReadableByteChannel getInput();
+    I getInput();
 
     /**
      * Get the output channel, if any. This corresponds to the input channel on the remote side.
-     *
-     * <p>
-     * The returned channel will typically also implement {@link InterruptibleChannel}, but that is implementation-dependent.
      *
      * <p>
      * It's possible that the returned channel requires a non-default {@link SelectorProvider}; if so, that must be
@@ -76,5 +80,5 @@ public interface NestedChannelRequest {
      *
      * @return the output channel associated with this instance, or null if this instance was created with only an input channel
      */
-    WritableByteChannel getOutput();
+    O getOutput();
 }

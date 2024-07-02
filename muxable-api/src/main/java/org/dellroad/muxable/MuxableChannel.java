@@ -7,7 +7,10 @@ package org.dellroad.muxable;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channel;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.SelectableChannel;
 import java.nio.channels.Selector;
+import java.nio.channels.WritableByteChannel;
 import java.util.concurrent.BlockingQueue;
 
 /**
@@ -42,8 +45,14 @@ import java.util.concurrent.BlockingQueue;
  * along with the {@link BlockingQueue} returned by {@link #getNestedChannelRequests}, there exists some {@link Thread}
  * or {@link Selector} currently polling for data, and there is any data is available, then at least one must become
  * readable and provide new data.
+ *
+ * @param <I> input channel type
+ * @param <O> output channel type
  */
-public interface MuxableChannel extends Channel {
+public interface MuxableChannel<
+  I extends SelectableChannel & ReadableByteChannel,
+  O extends SelectableChannel & WritableByteChannel>
+    extends Channel {
 
     /**
      * Create a new nested channel, or pair of nested channels, scoped to this instance.
@@ -60,7 +69,7 @@ public interface MuxableChannel extends Channel {
      * @throws IOException if an I/O error occurs
      * @throws IllegalArgumentException if either parameter is null
      */
-    NestedChannelRequest newNestedChannelRequest(ByteBuffer requestData, Directions directions) throws IOException;
+    NestedChannelRequest<I, O> newNestedChannelRequest(ByteBuffer requestData, Directions directions) throws IOException;
 
     /**
      * Create a pair of nested input and output channels scoped to this instance.
@@ -74,7 +83,7 @@ public interface MuxableChannel extends Channel {
      * @throws IOException if an I/O error occurs
      * @throws IllegalArgumentException if {@code requestData} is null
      */
-    default NestedChannelRequest newNestedChannelRequest(ByteBuffer requestData) throws IOException {
+    default NestedChannelRequest<I, O> newNestedChannelRequest(ByteBuffer requestData) throws IOException {
         return this.newNestedChannelRequest(requestData, Directions.BIDIRECTIONAL);
     }
 
@@ -86,18 +95,19 @@ public interface MuxableChannel extends Channel {
      * {@link #newNestedChannelRequest newNestedChannelRequest()}. Moreover, the order of requests is preserved.
      *
      * <p>
-     * Because the remote side can close a nested channel at any time, it is possible that a {@link NestedChannelRequest}
-     * is already closed by the time it's pulled from this queue. In this case, the input and output channels
-     * will throw {@link IOException} on first access.
+     * Because the remote side can close a nested channel at any time, it is possible that the new channel associated
+     * with an incoming {@link NestedChannelRequest} has already been closed in a subsequent message from the remote peer
+     * by the time the original {@link NestedChannelRequest} is pulled from this queue. In such a case, the nested channel's
+     * input and output streams will throw {@link IOException} on first access.
      *
      * <p>
      * Note: no special change happens to the returned {@link BlockingQueue} once this instance is closed;
-     * instead, new reqeusts simply stop appearing. Therefore, after closing this instance, any thread(s)
+     * instead, new requests simply stop appearing. Therefore, after closing this instance, any thread(s)
      * that are blocked polling for new data may need to be woken up via {@link Thread#interrupt}.
      *
      * @return queue of {@link NestedChannelRequest} initiated from the remote side
      */
-    BlockingQueue<NestedChannelRequest> getNestedChannelRequests();
+    BlockingQueue<? extends NestedChannelRequest<I, O>> getNestedChannelRequests();
 
     /**
      * Close this instance.
