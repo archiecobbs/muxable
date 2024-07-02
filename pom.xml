@@ -5,10 +5,14 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.dellroad</groupId>
+    <parent>
+        <groupId>org.dellroad</groupId>
+        <artifactId>dellroad-dependencies</artifactId>
+        <version>3.2.5.0</version>
+    </parent>
     <artifactId>muxable</artifactId>
     <name>Muxable</name>
-    <version>0.5.0</version>
+    <version>0.6.0</version>
     <packaging>pom</packaging>
     <description>A Java library for multiplexing multiple byte-oriented channels over a single parent channel.</description>
     <url>https://github.com/archiecobbs/muxable</url>
@@ -42,36 +46,12 @@
     <properties>
 
         <!-- Basic stuff -->
-        <compiler.source>1.8</compiler.source>
-        <compiler.target>1.8</compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <checkstyle.config.location>src/checkstyle/checkstyle.xml</checkstyle.config.location>
+        <java.version>17</java.version>
 
         <!-- Dependency versions -->
-        <dellroad-stuff.version>2.4.7</dellroad-stuff.version>
-        <findbugs.version>3.0.2</findbugs.version>
-        <log4j.version>1.2.17</log4j.version>
-        <permazen.version>4.1.7</permazen.version>
-        <slf4j.version>1.7.30</slf4j.version>
-        <spotbugs.version>4.0.0</spotbugs.version>
-        <testng.version>7.1.0</testng.version>
-
-        <!-- Dependency versions -->
-        <maven.artifact.version>3.6.3</maven.artifact.version>
-        <maven.checkstyle.plugin.version>3.0.0</maven.checkstyle.plugin.version>
-        <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
-        <maven.enforcer.plugin.version>3.0.0-M3</maven.enforcer.plugin.version>
-        <maven.gpg.plugin.version>1.6</maven.gpg.plugin.version>
-        <maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
-        <maven.javadoc.plugin.version>3.2.0</maven.javadoc.plugin.version>
-        <maven.plugin.tools.version>3.6.0</maven.plugin.tools.version>
-        <maven.project.info.reports.plugin.version>2.9</maven.project.info.reports.plugin.version>
-        <maven.site.plugin.version>3.9.0</maven.site.plugin.version>
-        <maven.source.plugin.version>3.2.1</maven.source.plugin.version>
-        <maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
-        <maven.wagon.scm.extension.version>3.3.4</maven.wagon.scm.extension.version>
-        <properties.maven.plugin.version>1.0.0</properties.maven.plugin.version>
-        <spotbugs.maven.plugin.version>4.0.0</spotbugs.maven.plugin.version>
+        <testng.version>7.7.0</testng.version>
+        <maven-checkstyle-plugin.version>3.4.0</maven-checkstyle-plugin.version>
     </properties>
 
     <dependencies>
@@ -94,44 +74,20 @@
     <dependencyManagement>
         <dependencies>
 
+            <!-- Set versions for the usual dependencies -->
+            <dependency>
+                <groupId>org.dellroad</groupId>
+                <artifactId>dellroad-dependencies</artifactId>
+                <version>3.2.5.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <!-- Siblings -->
             <dependency>
                 <groupId>org.dellroad</groupId>
                 <artifactId>muxable-api</artifactId>
                 <version>${project.version}</version>
-            </dependency>
-
-            <!-- Logging -->
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>${slf4j.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>${log4j.version}</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <!-- DellRoad Stuff -->
-            <dependency>
-                <groupId>org.dellroad</groupId>
-                <artifactId>dellroad-stuff-main</artifactId>
-                <version>${dellroad-stuff.version}</version>
-            </dependency>
-
-            <!-- Permazen -->
-            <dependency>
-                <groupId>io.permazen</groupId>
-                <artifactId>permazen-util</artifactId>
-                <version>${permazen.version}</version>
             </dependency>
 
             <!-- Testing & Debug -->
@@ -140,18 +96,6 @@
                 <artifactId>testng</artifactId>
                 <version>${testng.version}</version>
                 <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.dellroad</groupId>
-                <artifactId>dellroad-stuff-test</artifactId>
-                <version>${dellroad-stuff.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.google.code.findbugs</groupId>
-                <artifactId>jsr305</artifactId>
-                <version>${findbugs.version}</version>
-                <scope>provided</scope><!-- not needed at runtime -->
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -175,33 +119,17 @@
     <build>
         <plugins>
 
-            <!-- Avoid Mac OS X "Launcher" application appearing during build -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>properties-maven-plugin</artifactId>
-                <version>${properties.maven.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>set-system-properties</goal>
-                        </goals>
-                        <configuration>
-                            <properties>
-                                <property>
-                                    <name>java.awt.headless</name>
-                                    <value>true</value>
-                                </property>
-                            </properties>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
             <!-- Maven enforcer -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>${maven.enforcer.plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>extra-enforcer-rules</artifactId>
+                        <version>${extra-enforcer-rules.version}</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <id>maven_enforcer</id>
@@ -214,22 +142,36 @@
 
                                 <!-- Enforce Java version -->
                                 <requireJavaVersion>
-                                    <version>1.8.0</version>
+                                    <version>[${java.version},)</version>
+                                    <display>false</display>
                                 </requireJavaVersion>
 
-                                <!-- Enforce Maven version -->
+                                <!-- Enforce maximum bytecode version among dependencies -->
+                                <enforceBytecodeVersion>
+                                    <maxJdkVersion>${java.version}</maxJdkVersion>
+                                </enforceBytecodeVersion>
+
+                                <!-- Enforce Maven version 3.6.3 or better -->
                                 <!-- https://github.com/jgitver/jgitver-maven-plugin/issues/119 -->
                                 <requireMavenVersion>
-                                    <version>(,3.6.2),(3.6.2,)</version>
+                                    <version>[3.6.3,)</version>
                                 </requireMavenVersion>
 
                                 <!-- Check for dependency conflicts -->
                                 <!-- <dependencyConvergence/> -->
                                 <banDuplicatePomDependencyVersions/>
 
+                                <!-- Check for same class appearing more than once but not identically -->
+                                <banDuplicateClasses>
+                                    <findAllDuplicates>true</findAllDuplicates>
+                                    <ignoreWhenIdentical>true</ignoreWhenIdentical>
+                                </banDuplicateClasses>
+
                                 <!-- Other rules -->
                                 <reactorModuleConvergence/>
-                                <requireUpperBoundDeps/>
+                            <!--
+                                <requireUpperBoundDeps/>        See https://github.com/vaadin/spring/issues/1070
+                            -->
 
                             </rules>
                         </configuration>
@@ -237,11 +179,26 @@
                 </executions>
             </plugin>
 
+            <!-- Compile -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <release>${java.version}</release>
+                    <showWarnings>true</showWarnings>
+                    <compilerArgs>
+                        <arg>-Xlint:all,-serial,-processing</arg>
+                        <arg>-implicit:class</arg>
+                        <arg>-parameters</arg>
+                        <arg>-Werror</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+
             <!-- JAR -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>${maven.jar.plugin.version}</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -251,27 +208,36 @@
                 </configuration>
             </plugin>
 
-            <!-- Compile -->
+            <!-- Checkstyle -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler.plugin.version}</version>
-                <configuration>
-                    <source>${compiler.source}</source>
-                    <target>${compiler.target}</target>
-                    <showWarnings>true</showWarnings>
-                    <compilerArgs>
-                        <arg>-Xlint:all,-processing</arg>
-                        <arg>-Werror</arg>
-                    </compilerArgs>
-                </configuration>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-verify</id>
+                        <phase>verify</phase>
+                        <configuration>
+                            <failOnViolation>true</failOnViolation>
+                            <includeResources>false</includeResources>
+                            <includeTestResources>false</includeTestResources>
+                            <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                            <sourceDirectories>
+                                <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+                                <sourceDirectory>${project.build.testSourceDirectory}</sourceDirectory>
+                            </sourceDirectories>
+                            <configLocation>src/checkstyle/checkstyle.xml</configLocation>
+                        </configuration>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- Sources -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>${maven.source.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -286,14 +252,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>${maven.javadoc.plugin.version}</version>
                 <configuration>
                     <notimestamp>true</notimestamp>
                     <validateLinks>true</validateLinks>
+                    <doclint>-reference,-missing</doclint>
                     <links>
                         <link>http://permazen.github.io/permazen/site/apidocs/</link>
                         <link>https://archiecobbs.github.io/dellroad-stuff/site/apidocs/</link>
-                        <link>https://docs.oracle.com/javase/8/docs/api/</link>
                         <link>https://www.slf4j.org/apidocs/</link>
                     </links>
                 </configuration>
@@ -311,7 +276,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven.surefire.plugin.version}</version>
                 <configuration>
                     <systemPropertyVariables>
                         <projectBuildDirectory>${project.build.directory}</projectBuildDirectory>
@@ -327,44 +291,14 @@
                 </configuration>
             </plugin>
 
-            <!-- Checkstyle -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>${maven.checkstyle.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>checkstyle_verify</id>
-                        <phase>compile</phase>
-                        <configuration>
-                            <consoleOutput>true</consoleOutput>
-                            <encoding>UTF-8</encoding>
-                            <failsOnError>true</failsOnError>
-                            <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                            <linkXRef>false</linkXRef>
-                            <sourceDirectories>
-                                <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
-                                <sourceDirectory>${project.build.testSourceDirectory}</sourceDirectory>
-                            </sourceDirectories>
-                        </configuration>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
             <!-- SpotBugs -->
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>${spotbugs.maven.plugin.version}</version>
                 <configuration>
                     <effort>Max</effort>
                     <threshold>Default</threshold>
                     <xmlOutput>true</xmlOutput>
-                    <findbugsXmlOutput>true</findbugsXmlOutput>
-                    <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
                     <excludeFilterFile>src/spotbugs/spotbugs-exclude.xml</excludeFilterFile>
                     <failOnError>true</failOnError>
                 </configuration>
@@ -382,21 +316,19 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>${maven.project.info.reports.plugin.version}</version>
             </plugin>
 
             <!-- Site plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>${maven.site.plugin.version}</version>
             </plugin>
         </plugins>
         <extensions>
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
                 <artifactId>wagon-scm</artifactId>
-                <version>${maven.wagon.scm.extension.version}</version>
+                <version>${maven-wagon-scm-extension.version}</version>
             </extension>
         </extensions>
     </build>
@@ -407,16 +339,15 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>${maven.javadoc.plugin.version}</version>
                 <inherited>false</inherited>
                 <configuration>
                     <notimestamp>true</notimestamp>
                     <validateLinks>true</validateLinks>
                     <aggregate>true</aggregate>
+                    <doclint>-missing</doclint>
                     <links>
                         <link>http://permazen.github.io/permazen/site/apidocs/</link>
                         <link>https://archiecobbs.github.io/dellroad-stuff/site/apidocs/</link>
-                        <link>https://docs.oracle.com/javase/8/docs/api/</link>
                         <link>https://www.slf4j.org/apidocs/</link>
                     </links>
                 </configuration>
@@ -442,7 +373,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>${maven.gpg.plugin.version}</version>
+                        <version>${maven-gpg-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>

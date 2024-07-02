@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2021 Archie L. Cobbs. All rights reserved.
  */
@@ -297,7 +296,7 @@ public class ProtocolReader extends LoggingSupport {
         this.payloadBuffer.put(this.readOut(data, payloadRemaining));
 
         // Deliver it to the input handler
-        this.deliverPayload((ByteBuffer)this.payloadBuffer.flip());
+        this.deliverPayload(this.payloadBuffer.flip());
         return true;
     }
 
@@ -420,7 +419,7 @@ public class ProtocolReader extends LoggingSupport {
             return buffer;
 
         // Extract "length" bytes from what's available
-        final ByteBuffer slice = (ByteBuffer)buffer.slice().limit(length);
+        final ByteBuffer slice = buffer.slice().limit(length);
 
         // Advance the underlying buffer
         buffer.position(buffer.position() + length);
