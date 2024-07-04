@@ -148,6 +148,7 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
      * Although it's not enforced by the parameter type, the given {@code channel} must subclass {@link SelectableChannel}.
      *
      * @param channel underlying channel for both input and output
+     * @param <C> bidirectional channel type
      * @throws IllegalArgumentException if {@code channel} is null
      */
     public <C extends SelectableChannel & ByteChannel> SimpleMuxableChannel(C channel) {
@@ -163,6 +164,8 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
      *
      * @param input channel receiving input from the remote side
      * @param output channel taking output from the local side
+     * @param <I> input channel type
+     * @param <O> output channel type
      * @throws IllegalArgumentException if either channel is not a {@link SelectableChannel}
      */
     public <I extends SelectableChannel & ReadableByteChannel, O extends SelectableChannel & WritableByteChannel>
@@ -180,6 +183,8 @@ public class SimpleMuxableChannel extends SelectorSupport implements MuxableChan
      * @param provider the {@link SelectorProvider} that this instance will use
      * @param input channel receiving input from the remote side
      * @param output channel taking output from the local side
+     * @param <I> input channel type
+     * @param <O> output channel type
      * @throws IllegalArgumentException if {@code provider} is null
      * @throws IllegalArgumentException if either channel is not a {@link SelectableChannel}
      */
