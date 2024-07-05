@@ -172,12 +172,12 @@ implements <a href="../MuxableChannel.html" title="interface in org.dellroad.mux
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(C)" class="member-name-link">SimpleMuxableChannel</a><wbr>(C&nbsp;channel)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Constructor taking a single, bi-directional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/ByteChannel.html" title="class or interface in java.nio.channels" class="external-link"><code>ByteChannel</code></a>, and using the default <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/spi/SelectorProvider.html" title="class or interface in java.nio.channels.spi" class="external-link"><code>SelectorProvider</code></a>.</div>
+<div class="block">Constructor taking a single, bi-directional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/ByteChannel.html" title="class or interface in java.nio.channels" class="external-link"><code>ByteChannel</code></a>.</div>
 </div>
 <div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(I,O)" class="member-name-link">SimpleMuxableChannel</a><wbr>(I&nbsp;input,
  O&nbsp;output)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Constructor using the default <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/spi/SelectorProvider.html" title="class or interface in java.nio.channels.spi" class="external-link"><code>SelectorProvider</code></a>.</div>
+<div class="block">Constructor.</div>
 </div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.nio.channels.spi.SelectorProvider,I,O)" class="member-name-link">SimpleMuxableChannel</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/spi/SelectorProvider.html" title="class or interface in java.nio.channels.spi" class="external-link">SelectorProvider</a>&nbsp;provider,
  I&nbsp;input,
@@ -254,11 +254,13 @@ implements <a href="../MuxableChannel.html" title="interface in org.dellroad.mux
 <section class="detail" id="&lt;init&gt;(C)">
 <h3 id="&lt;init&gt;(java.nio.channels.SelectableChannel)">SimpleMuxableChannel</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">SimpleMuxableChannel</span><wbr><span class="parameters">(C&nbsp;channel)</span></div>
-<div class="block">Constructor taking a single, bi-directional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/ByteChannel.html" title="class or interface in java.nio.channels" class="external-link"><code>ByteChannel</code></a>, and using the default <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/spi/SelectorProvider.html" title="class or interface in java.nio.channels.spi" class="external-link"><code>SelectorProvider</code></a>.
+<div class="block">Constructor taking a single, bi-directional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/ByteChannel.html" title="class or interface in java.nio.channels" class="external-link"><code>ByteChannel</code></a>.
 
  <p>
- Although it's not enforced by the parameter type, the given <code>channel</code> must subclass <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/SelectableChannel.html" title="class or interface in java.nio.channels" class="external-link"><code>SelectableChannel</code></a>.</div>
+ Equivalent to: <code>SimpleMuxableChannel(channel, channel)</code>.</div>
 <dl class="notes">
+<dt>Type Parameters:</dt>
+<dd><code>C</code> - bidirectional channel type</dd>
 <dt>Parameters:</dt>
 <dd><code>channel</code> - underlying channel for both input and output</dd>
 <dt>Throws:</dt>
@@ -271,17 +273,19 @@ implements <a href="../MuxableChannel.html" title="interface in org.dellroad.mux
 <h3 id="&lt;init&gt;(java.nio.channels.SelectableChannel,java.nio.channels.SelectableChannel)">SimpleMuxableChannel</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">SimpleMuxableChannel</span><wbr><span class="parameters">(I&nbsp;input,
  O&nbsp;output)</span></div>
-<div class="block">Constructor using the default <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/spi/SelectorProvider.html" title="class or interface in java.nio.channels.spi" class="external-link"><code>SelectorProvider</code></a>.
+<div class="block">Constructor.
 
  <p>
- Although it's not enforced by the parameter types, the given <code>input</code> and <code>output</code> must subclass
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/SelectableChannel.html" title="class or interface in java.nio.channels" class="external-link"><code>SelectableChannel</code></a>.</div>
+ The <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/spi/SelectorProvider.html" title="class or interface in java.nio.channels.spi" class="external-link"><code>SelectorProvider</code></a> is inferred from <code>input</code>.</div>
 <dl class="notes">
+<dt>Type Parameters:</dt>
+<dd><code>I</code> - input channel type</dd>
+<dd><code>O</code> - output channel type</dd>
 <dt>Parameters:</dt>
 <dd><code>input</code> - channel receiving input from the remote side</dd>
 <dd><code>output</code> - channel taking output from the local side</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - if either channel is not a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/SelectableChannel.html" title="class or interface in java.nio.channels" class="external-link"><code>SelectableChannel</code></a></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - if either channel is null</dd>
 </dl>
 </section>
 </li>
@@ -291,19 +295,17 @@ implements <a href="../MuxableChannel.html" title="interface in org.dellroad.mux
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">SimpleMuxableChannel</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/spi/SelectorProvider.html" title="class or interface in java.nio.channels.spi" class="external-link">SelectorProvider</a>&nbsp;provider,
  I&nbsp;input,
  O&nbsp;output)</span></div>
-<div class="block">Primary constructor.
-
- <p>
- Although it's not enforced by the parameter types, the given <code>input</code> and <code>output</code> must subclass
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/SelectableChannel.html" title="class or interface in java.nio.channels" class="external-link"><code>SelectableChannel</code></a>.</div>
+<div class="block">Primary constructor.</div>
 <dl class="notes">
+<dt>Type Parameters:</dt>
+<dd><code>I</code> - input channel type</dd>
+<dd><code>O</code> - output channel type</dd>
 <dt>Parameters:</dt>
 <dd><code>provider</code> - the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/spi/SelectorProvider.html" title="class or interface in java.nio.channels.spi" class="external-link"><code>SelectorProvider</code></a> that this instance will use</dd>
 <dd><code>input</code> - channel receiving input from the remote side</dd>
 <dd><code>output</code> - channel taking output from the local side</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - if <code>provider</code> is null</dd>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - if either channel is not a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/SelectableChannel.html" title="class or interface in java.nio.channels" class="external-link"><code>SelectableChannel</code></a></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - if any parameter is null</dd>
 </dl>
 </section>
 </li>

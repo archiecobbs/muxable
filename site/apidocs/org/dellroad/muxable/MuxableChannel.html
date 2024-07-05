@@ -118,7 +118,15 @@ extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/ja
  However, all implementations must avoid "senseless deadlock"; more precisely: if, for every nested input channel
  along with the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/BlockingQueue.html" title="class or interface in java.util.concurrent" class="external-link"><code>BlockingQueue</code></a> returned by <a href="#getNestedChannelRequests()"><code>getNestedChannelRequests()</code></a>, there exists some <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Thread.html" title="class or interface in java.lang" class="external-link"><code>Thread</code></a>
  or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/channels/Selector.html" title="class or interface in java.nio.channels" class="external-link"><code>Selector</code></a> currently polling for data, and there is any data is available, then at least one must become
- readable and provide new data.</div>
+ readable and provide new data.
+
+ <p>
+ <b>Recursive Nesting</b>
+
+ <p>
+ An inner <a href="MuxableChannel.html" title="interface in org.dellroad.muxable"><code>MuxableChannel</code></a> may be created from a nested channel that itself was created from an outer
+ <a href="MuxableChannel.html" title="interface in org.dellroad.muxable"><code>MuxableChannel</code></a>. This process may be repeated with arbitrary levels of nesting. As always, the closure
+ of any channel forces the closure of all of its nested channels, and ultimately closing all of its descendents.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
