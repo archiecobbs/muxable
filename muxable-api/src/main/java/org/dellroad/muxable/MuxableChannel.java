@@ -46,6 +46,14 @@ import java.util.concurrent.BlockingQueue;
  * or {@link Selector} currently polling for data, and there is any data is available, then at least one must become
  * readable and provide new data.
  *
+ * <p>
+ * <b>Recursive Nesting</b>
+ *
+ * <p>
+ * An inner {@link MuxableChannel} may be created from a nested channel that itself was created from an outer
+ * {@link MuxableChannel}. This process may be repeated with arbitrary levels of nesting. As always, the closure
+ * of any channel forces the closure of all of its nested channels, and ultimately closing all of its descendents.
+ *
  * @param <I> input channel type
  * @param <O> output channel type
  */
