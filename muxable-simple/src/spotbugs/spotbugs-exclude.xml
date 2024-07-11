@@ -8,4 +8,9 @@
         <Method name="sendData"/>
         <Bug pattern="SF_SWITCH_FALLTHROUGH"/>
     </Match>
+    <Match>
+        <Class name="org.dellroad.muxable.simple.SimpleMuxableChannel"/>
+        <Field name="~peer(Input|Output)"/>
+        <Bug pattern="IS2_INCONSISTENT_SYNC"/>
+    </Match>
 </FindBugsFilter>

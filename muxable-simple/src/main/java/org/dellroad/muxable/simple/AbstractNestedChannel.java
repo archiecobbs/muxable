@@ -10,18 +10,18 @@ import java.nio.channels.SelectableChannel;
 import java.nio.channels.WritableByteChannel;
 
 import org.dellroad.muxable.MuxableChannel;
-import org.dellroad.muxable.NestedChannelRequest;
+import org.dellroad.muxable.NestedChannel;
 
 /**
- * A straightforward implementation of the {@link NestedChannelRequest} interface.
+ * A straightforward implementation of most of the {@link NestedChannel} interface.
  *
  * @param <I> input channel type
  * @param <O> output channel type
  */
-public class DefaultNestedChannelRequest<
+public abstract class AbstractNestedChannel<
   I extends SelectableChannel & ReadableByteChannel,
   O extends SelectableChannel & WritableByteChannel>
-    implements NestedChannelRequest<I, O> {
+    implements NestedChannel<I, O> {
 
     protected final MuxableChannel<I, O> parent;
     protected final ByteBuffer requestData;
@@ -39,7 +39,7 @@ public class DefaultNestedChannelRequest<
      * @throws IllegalArgumentException if {@code input} and {@code output} are both null
      * @throws IllegalArgumentException if {@code requestData} is null
      */
-    public DefaultNestedChannelRequest(MuxableChannel<I, O> parent, I input, O output, ByteBuffer requestData) {
+    protected AbstractNestedChannel(MuxableChannel<I, O> parent, I input, O output, ByteBuffer requestData) {
         if (parent == null)
             throw new IllegalArgumentException("null parent");
         if (input == null && output == null)
@@ -52,7 +52,7 @@ public class DefaultNestedChannelRequest<
         this.requestData = requestData;
     }
 
-// NestedChannelRequest
+// NestedChannel
 
     @Override
     public MuxableChannel<I, O> getParent() {
@@ -72,5 +72,13 @@ public class DefaultNestedChannelRequest<
     @Override
     public ByteBuffer getRequestData() {
         return this.requestData;
+    }
+
+// Object
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName()
+          + "[data=" + LoggingSupport.toString(this.requestData, 64) + "]";
     }
 }

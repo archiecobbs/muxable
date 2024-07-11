@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import org.dellroad.muxable.Directions;
+import org.slf4j.Logger;
 
 /**
  * Input state machine for the {@link SimpleMuxableChannel} framing protocol.
@@ -29,7 +30,7 @@ public class ProtocolReader extends LoggingSupport {
     // Long value buffer/decoding
     private final ByteBuffer longValueBuffer                                            // buffers a long value, possibly encoded
       = ByteBuffer.allocate(LongEncoder.MAX_ENCODED_LENGTH);
-    private long longValueOffset;                                                       // offset of start of long value
+    private long longValueOffset;                                                       // stream offset of start of long value
     private long longValue;                                                             // the long value once completed
 
     // Incoming payload info
@@ -52,6 +53,25 @@ public class ProtocolReader extends LoggingSupport {
      * @throws IllegalArgumentException if {@code inputHandler} is null
      */
     public ProtocolReader(ChannelIds channelIds, InputHandler inputHandler) {
+        if (channelIds == null)
+            throw new IllegalArgumentException("null channelIds");
+        if (inputHandler == null)
+            throw new IllegalArgumentException("null inputHandler");
+        this.channelIds = channelIds;
+        this.inputHandler = inputHandler;
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param log {@link Logger} to use
+     * @param logPrefix prefix for all log messages, or null for empty string
+     * @param channelIds channel ID tracker (should be shared with the {@link ProtocolWriter})
+     * @param inputHandler callback interface for generated events
+     * @throws IllegalArgumentException if {@code log} or {@code inputHandler} is null
+     */
+    public ProtocolReader(Logger log, String logPrefix, ChannelIds channelIds, InputHandler inputHandler) {
+        super(log, logPrefix);
         if (channelIds == null)
             throw new IllegalArgumentException("null channelIds");
         if (inputHandler == null)
@@ -99,13 +119,22 @@ public class ProtocolReader extends LoggingSupport {
 
         // Consume the data until if/when a "close connection" frame is seen
         while (data.hasRemaining()) {
-            this.trace("state %s: input data %s", this.state, this.toString(data, 64));
+            this.trace("state %s: input data %s", this.state, LoggingSupport.toString(data, 64));
             if (!this.state.inputData(this, data))
                 return false;
         }
 
         // Done
         return true;
+    }
+
+    /**
+     * Get the current stream offset.
+     *
+     * @return stream offset
+     */
+    public long getOffset() {
+        return this.offset;
     }
 
 // State Machine
@@ -119,7 +148,7 @@ public class ProtocolReader extends LoggingSupport {
 
         // Validate protocol cookie
         final long protocolCookie = this.longValue;
-        this.debug("state %s: read protocol cookie 0x%016x", this.state, protocolCookie);
+        this.trace("state %s: read protocol cookie 0x%016x", this.state, protocolCookie);
         if (protocolCookie != ProtocolConstants.PROTOCOL_COOKIE) {
             throw this.violation = new ProtocolViolationException(this.longValueOffset,
               String.format("rec'd invalid protocol cookie 0x%016x != 0x%016x", protocolCookie, ProtocolConstants.PROTOCOL_COOKIE));
@@ -139,7 +168,7 @@ public class ProtocolReader extends LoggingSupport {
 
         // Validate protocol version
         final long protocolVersion = this.longValue;
-        this.debug("state %s: read protocol version %d", this.state, protocolVersion);
+        this.trace("state %s: read protocol version %d", this.state, protocolVersion);
         if (protocolVersion != ProtocolConstants.CURRENT_PROTOCOL_VERSION) {
             throw this.violation = new ProtocolViolationException(this.longValueOffset,
               String.format("rec'd unsupported protocol version %d (current is %d)",
@@ -159,7 +188,8 @@ public class ProtocolReader extends LoggingSupport {
             return true;
 
         // Zero means close the whole thing down
-        this.debug("state %s: read peer's encoded channel ID %d", this.state, this.longValue);
+        this.trace("state %s: read peer's encoded channel ID %d (channel %s%d)",
+          this.state, this.longValue, this.longValue <= 0 ? "L" : "R", Math.abs(this.longValue));
         if (this.longValue == 0) {
             this.state = State.CLOSED;
             return false;
@@ -217,8 +247,7 @@ public class ProtocolReader extends LoggingSupport {
             throw this.violation = new ProtocolViolationException(this.longValueOffset,
               String.format("rec'd invalid frame: invalid flags byte 0x%02x", flags & 0xff));
         }
-        this.debug("state %s: for new remote channel %d is %s",
-          this.state, this.payloadChannelId, this.newChannelDirections);
+        this.trace("state %s: new remote channel %d is %s", this.state, this.payloadChannelId, this.newChannelDirections);
 
         // Proceed
         this.state = State.READING_PAYLOAD_LENGTH;
@@ -233,13 +262,13 @@ public class ProtocolReader extends LoggingSupport {
             return true;
 
         // Check value is within range
-        this.debug("state %s: read length %d for %s on %s channel %d", this.state,
+        this.trace("state %s: read length %d for %s on channel %s%d", this.state,
           this.longValue, this.newChannelRequest ? "requestData" : "payload",
-          this.payloadChannelIdIsLocal ? "local" : "remote", this.payloadChannelId);
+          this.payloadChannelIdIsLocal ? "L" : "R", this.payloadChannelId);
         if (this.longValue < 0 || this.longValue > Integer.MAX_VALUE) {
             throw this.violation = new ProtocolViolationException(this.longValueOffset,
-              String.format("rec'd frame on %s channel %d with invalid payload length %d",
-               this.payloadChannelIdIsLocal ? "local" : "remote", this.payloadChannelId, this.longValue));
+              String.format("rec'd frame on channel %s%d with invalid payload length %d",
+               this.payloadChannelIdIsLocal ? "L" : "R", this.payloadChannelId, this.longValue));
         }
         final int payloadLength = (int)this.longValue;
 
@@ -247,8 +276,8 @@ public class ProtocolReader extends LoggingSupport {
         if (!this.newChannelRequest && payloadLength == 0) {
 
             // Deallocate channel
-            this.debug("state %s: closing %s channel %d", this.state,
-              this.payloadChannelIdIsLocal ? "local" : "remote", this.payloadChannelId);
+            this.trace("state %s: closing channel %s%d", this.state,
+              this.payloadChannelIdIsLocal ? "L" : "R", this.payloadChannelId);
             this.channelIds.freeChannelId(this.payloadChannelId, this.payloadChannelIdIsLocal);
 
             // Notify input handler
@@ -261,8 +290,8 @@ public class ProtocolReader extends LoggingSupport {
             }
 
             // Read the next frame
-            this.debug("state %s: closed %s channel %d", this.state,
-              this.payloadChannelIdIsLocal ? "local" : "remote", this.payloadChannelId);
+            this.trace("state %s: closed channel %s%d", this.state,
+              this.payloadChannelIdIsLocal ? "L" : "R", this.payloadChannelId);
             this.state = State.READING_CHANNEL_ID;
             return true;
         }
@@ -311,8 +340,8 @@ public class ProtocolReader extends LoggingSupport {
     private void deliverPayload(ByteBuffer payload) throws IOException {
 
         // Debug
-        this.debug("state %s: deliver %d byte payload from %s channel %d", this.state,
-          payload.remaining(), this.payloadChannelIdIsLocal ? "local" : "remote", this.payloadChannelId);
+        this.trace("state %s: deliver %d byte payload from channel %s%d", this.state,
+          payload.remaining(), this.payloadChannelIdIsLocal ? "L" : "R", this.payloadChannelId);
 
         // Check whether channel is still open, and if so deliver payload to handler
         final long encodedChannelId = this.getEncodedChannelId();
@@ -327,8 +356,8 @@ public class ProtocolReader extends LoggingSupport {
                 this.reentrantHandler = false;
             }
         } else {
-            this.debug("state %s: discarding %d byte payload on closed %s channel %d", this.state,
-              payload.remaining(), this.payloadChannelIdIsLocal ? "local" : "remote", this.payloadChannelId);
+            this.trace("state %s: discarding %d byte payload on closed channel %s%d", this.state,
+              payload.remaining(), this.payloadChannelIdIsLocal ? "L" : "R", this.payloadChannelId);
         }
 
         // Reset state and start reading the next frame
@@ -406,17 +435,13 @@ public class ProtocolReader extends LoggingSupport {
         return this.payloadChannelIdIsLocal ? this.payloadChannelId : -this.payloadChannelId;
     }
 
-    // Read out the next "length" bytes from the given ByteBuffer and return them in a (possibly) new ByteBuffer
+    // Read out the next "length" bytes from the given ByteBuffer and return them in a new ByteBuffer
     private ByteBuffer readOut(ByteBuffer buffer, int length) {
 
         // Sanity check
         final int available = buffer.remaining();
         if (available < length)
             throw new IllegalArgumentException("invalid length");
-
-        // If exact match, just return the original buffer
-        if (available == length)
-            return buffer;
 
         // Extract "length" bytes from what's available
         final ByteBuffer slice = buffer.slice().limit(length);

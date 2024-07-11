@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import org.dellroad.muxable.Directions;
+import org.slf4j.Logger;
 
 /**
  * Output state machine for the {@link SimpleMuxableChannel} framing protocol.
@@ -33,6 +34,25 @@ public class ProtocolWriter extends LoggingSupport {
      * @throws IllegalArgumentException if {@code outputHandler} is null
      */
     public ProtocolWriter(ChannelIds channelIds, OutputHandler outputHandler) {
+        if (channelIds == null)
+            throw new IllegalArgumentException("null channelIds");
+        if (outputHandler == null)
+            throw new IllegalArgumentException("null outputHandler");
+        this.channelIds = channelIds;
+        this.outputHandler = outputHandler;
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param log {@link Logger} to use
+     * @param logPrefix prefix for all log messages, or null for empty string
+     * @param channelIds channel ID tracker (should be shared with the {@link ProtocolReader})
+     * @param outputHandler invoked when there are bytes to send
+     * @throws IllegalArgumentException if {@code log} or {@code outputHandler} is null
+     */
+    public ProtocolWriter(Logger log, String logPrefix, ChannelIds channelIds, OutputHandler outputHandler) {
+        super(log, logPrefix);
         if (channelIds == null)
             throw new IllegalArgumentException("null channelIds");
         if (outputHandler == null)
@@ -73,6 +93,7 @@ public class ProtocolWriter extends LoggingSupport {
         final long channelId = this.channelIds.allocateLocalChannelId();
 
         // Send channel request to peer
+        this.trace("open new local channel %d", channelId);
         this.sendData(channelId, directions, requestData);
 
         // Done
@@ -115,6 +136,7 @@ public class ProtocolWriter extends LoggingSupport {
             return false;
 
         // Send data
+        this.trace("write to channel %s%d: %s", channelId < 0 ? "R" : "L", Math.abs(channelId), LoggingSupport.toString(data, 64));
         this.sendData(channelId, null, data);
         return true;
     }
@@ -123,7 +145,7 @@ public class ProtocolWriter extends LoggingSupport {
      * Close an open nested channel.
      *
      * <p>
-     * This sends a "close connection" frame to the peer, unless we know the already peer knows the channel is closed.
+     * This sends a "close connection" frame to the peer, unless we know the peer already knows the channel is closed.
      *
      * <p>
      * Generated output, if any, will delivered to the configured {@link OutputHandler} synchronously (in the current thread).
@@ -149,6 +171,7 @@ public class ProtocolWriter extends LoggingSupport {
             return false;
 
         // Send data
+        this.trace("write close channel %s%d", channelId < 0 ? "R" : "L", Math.abs(channelId));
         this.sendData(channelId, null, null);
         return true;
     }
@@ -174,6 +197,7 @@ public class ProtocolWriter extends LoggingSupport {
             throw new IllegalStateException("illegal re-entrant invocation");
 
         // Write a "close" frame
+        this.trace("write close connection");
         this.sendData(0, null, null);
         this.state = State.CLOSED;
     }
@@ -222,12 +246,12 @@ public class ProtocolWriter extends LoggingSupport {
             header.flip();
 
             // Send header
-            this.debug("send header %s", this.toString(header, Integer.MAX_VALUE));
+            this.trace("send header %s", LoggingSupport.toString(header, Integer.MAX_VALUE));
             this.outputHandler.sendOutput(header);
 
             // Send payload
             if (payload != null && payload.hasRemaining()) {
-                this.debug("send payload %s", this.toString(payload, 64));
+                this.trace("send payload %s", LoggingSupport.toString(payload, 64));
                 this.outputHandler.sendOutput(payload);
             }
         } finally {

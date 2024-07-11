@@ -5,6 +5,7 @@
 package org.dellroad.muxable.simple;
 
 import org.dellroad.stuff.util.LongSet;
+import org.slf4j.Logger;
 
 /**
  * Tracks channel ID's for the {@link SimpleMuxableChannel} framing protocol.
@@ -28,6 +29,23 @@ public class ChannelIds extends LoggingSupport {
 
     private long prevLocalChannelId;                                // the previous local channel ID allocated
     private long prevRemoteChannelId;                               // the previous remote channel ID allocated
+
+    /**
+     * Deafult constructor.
+     */
+    public ChannelIds() {
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param log {@link Logger} to use
+     * @param logPrefix prefix for all log messages, or null for empty string
+     * @throws IllegalArgumentException if {@code log} is null
+     */
+    public ChannelIds(Logger log, String logPrefix) {
+        super(log, logPrefix);
+    }
 
     /**
      * Get the next available local channel ID.
@@ -64,7 +82,7 @@ public class ChannelIds extends LoggingSupport {
             throw new IllegalStateException("channel ID's exhausted");
         final long channelId = ++this.prevLocalChannelId;
         this.openChannelIds.add(channelId);
-        this.debug("allocated new local channel %d", channelId);
+        this.trace("allocated new local channel %d", channelId);
         return channelId;
     }
 
@@ -101,8 +119,8 @@ public class ChannelIds extends LoggingSupport {
         if (this.prevRemoteChannelId == Long.MAX_VALUE || channelId != this.prevRemoteChannelId + 1)
             return false;
         this.prevRemoteChannelId++;
-        this.openChannelIds.add(channelId);
-        this.debug("allocated new remote channel %d", channelId);
+        this.openChannelIds.add(-channelId);
+        this.trace("allocated new remote channel %d", channelId);
         return true;
     }
 
@@ -138,7 +156,7 @@ public class ChannelIds extends LoggingSupport {
             throw new IllegalArgumentException(String.format("invalid %s channel ID %d", local ? "local" : "remote", channelId));
         final boolean freed = this.openChannelIds.remove(local ? channelId : -channelId);
         if (freed)
-            this.debug("freed %s channel %d", local ? "local" : "remote", channelId);
+            this.trace("freed channel %s%d", local ? "L" : "R", channelId);
         return freed;
     }
 

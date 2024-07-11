@@ -5,9 +5,9 @@
 package org.dellroad.muxable;
 
 /**
- * Used to specifify which of input and/or output directions are desired.
+ * Used to specifify which of input and/or output directions are desired when creating a new nested channel.
  *
- * @see MuxableChannel#newNestedChannelRequest(ByteBuffer, Directions)
+ * @see MuxableChannel#newNestedChannel(ByteBuffer, Directions)
  */
 public enum Directions {
 

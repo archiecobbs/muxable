@@ -12,7 +12,7 @@
     </parent>
     <artifactId>muxable</artifactId>
     <name>Muxable</name>
-    <version>0.6.0</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
     <description>A Java library for multiplexing multiple byte-oriented channels over a single parent channel.</description>
     <url>https://github.com/archiecobbs/muxable</url>
@@ -50,6 +50,7 @@
         <java.version>17</java.version>
 
         <!-- Dependency versions -->
+        <dellroad-stuff.version>3.0.6</dellroad-stuff.version>
         <testng.version>7.7.0</testng.version>
         <maven-checkstyle-plugin.version>3.4.0</maven-checkstyle-plugin.version>
     </properties>

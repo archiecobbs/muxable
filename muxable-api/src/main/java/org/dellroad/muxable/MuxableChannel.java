@@ -22,11 +22,17 @@ import java.util.concurrent.BlockingQueue;
  * if a nested channel is closed, only that nested channel is affected, and its parent and siblings are unaffected.
  *
  * <p>
- * Nested channels are bidirectional. Unlike TCP sockets, they do not support shutting down only one direction.
- * Closing either input or output channel results in both channels being closed.
+ * More precisely, a nested channel is represented by a {@link NestedChannel}, which provides access to the
+ * input and output channels. When a {@link MuxableChannel} is closed, these two channels are explicitly closed
+ * for all of its existing nested channels (on the other hand, whether the channel(s) that connect to the peer,
+ * if any, are explicitly closed depends on the {@link MuxableChannel} implementation).
  *
  * <p>
- * Any exception implies brokenness: if a {@link MuxableChannel} or any nested channel throws {@link IOException},
+ * Nested channels are bidirectional. Unlike TCP sockets, they do not support shutting down only one direction.
+ * Closing either the input or output channel results in both channels being closed.
+ *
+ * <p>
+ * Any I/O exception implies brokenness: if a {@link MuxableChannel} or any nested channel throws {@link IOException},
  * one should assume it (the channel that threw the exception) is no longer usable and should be closed.
  *
  * <p>
@@ -66,46 +72,46 @@ public interface MuxableChannel<
      * Create a new nested channel, or pair of nested channels, scoped to this instance.
      *
      * <p>
-     * The remote side will be notified by the appearance of a corresponding {@link NestedChannelRequest} in the
-     * queue returned by {@link #getNestedChannelRequests} (with the input and output channels reversed, of course).
+     * The remote side will be notified by the appearance of a corresponding {@link NestedChannel} in the queue
+     * returned by {@link #getNestedChannelRequests} (with the input and output channels reversed, of course).
      * The delivery of requests on the remote side is guaranteed to preserve order (but only to the extent order
      * is well-defined on the sending side, i.e., there is a "happens before" relationship).
      *
-     * @param requestData data to supply to the remote side (via {@link NestedChannelRequest#getRequestData})
+     * @param requestData data to supply to the remote side (via {@link NestedChannel#getRequestData})
      * @param directions which of input and/or output to create
      * @return the newly created nested channel(s)
      * @throws IOException if an I/O error occurs
      * @throws IllegalArgumentException if either parameter is null
      */
-    NestedChannelRequest<I, O> newNestedChannelRequest(ByteBuffer requestData, Directions directions) throws IOException;
+    NestedChannel<I, O> newNestedChannel(ByteBuffer requestData, Directions directions) throws IOException;
 
     /**
      * Create a pair of nested input and output channels scoped to this instance.
      *
      * <p>
-     * Equivalent to: {@link #newNestedChannelRequest(ByteBuffer, Directions)
-     *  newNestedChannelRequest(requestData, Directions.BIDIRECTIONAL)}.
+     * Equivalent to: {@link #newNestedChannel(ByteBuffer, Directions)
+     *  newNestedChannel(requestData, Directions.BIDIRECTIONAL)}.
      *
-     * @param requestData data to supply to the remote side (via {@link NestedChannelRequest#getRequestData})
+     * @param requestData data to supply to the remote side (via {@link NestedChannel#getRequestData})
      * @return the newly created nested channel(s)
      * @throws IOException if an I/O error occurs
      * @throws IllegalArgumentException if {@code requestData} is null
      */
-    default NestedChannelRequest<I, O> newNestedChannelRequest(ByteBuffer requestData) throws IOException {
-        return this.newNestedChannelRequest(requestData, Directions.BIDIRECTIONAL);
+    default NestedChannel<I, O> newNestedChannel(ByteBuffer requestData) throws IOException {
+        return this.newNestedChannel(requestData, Directions.BIDIRECTIONAL);
     }
 
     /**
-     * Access the queue of incoming {@link NestedChannelRequest}s initiated from the remote side.
+     * Access the queue of incoming {@link NestedChannel}s initiated from the remote side.
      *
      * <p>
-     * Each {@link NestedChannelRequest} corresponds to a remote invocation of
-     * {@link #newNestedChannelRequest newNestedChannelRequest()}. Moreover, the order of requests is preserved.
+     * Each {@link NestedChannel} corresponds to a remote invocation of
+     * {@link #newNestedChannel newNestedChannel()}. Moreover, the order of requests is preserved.
      *
      * <p>
      * Because the remote side can close a nested channel at any time, it is possible that the new channel associated
-     * with an incoming {@link NestedChannelRequest} has already been closed in a subsequent message from the remote peer
-     * by the time the original {@link NestedChannelRequest} is pulled from this queue. In such a case, the nested channel's
+     * with an incoming {@link NestedChannel} has already been closed in a subsequent message from the remote peer
+     * by the time the original {@link NestedChannel} is pulled from this queue. In such a case, the nested channel's
      * input and output streams will throw {@link IOException} on first access.
      *
      * <p>
@@ -113,9 +119,9 @@ public interface MuxableChannel<
      * instead, new requests simply stop appearing. Therefore, after closing this instance, any thread(s)
      * that are blocked polling for new data may need to be woken up via {@link Thread#interrupt}.
      *
-     * @return queue of {@link NestedChannelRequest} initiated from the remote side
+     * @return queue of {@link NestedChannel} initiated from the remote side
      */
-    BlockingQueue<? extends NestedChannelRequest<I, O>> getNestedChannelRequests();
+    BlockingQueue<? extends NestedChannel<I, O>> getNestedChannelRequests();
 
     /**
      * Close this instance.

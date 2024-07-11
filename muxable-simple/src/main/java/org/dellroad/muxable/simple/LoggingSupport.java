@@ -151,7 +151,7 @@ public class LoggingSupport {
      * @return initial bytes in {@code data}, or "null" of {@code data} is null
      * @throws IllegalArgumentException if {@code maxBytes} is negative
      */
-    protected String toString(ByteBuffer data, int maxBytes) {
+    public static String toString(ByteBuffer data, int maxBytes) {
         if (maxBytes < 0)
             throw new IllegalArgumentException("maxBytes < 0");
         if (data == null)
