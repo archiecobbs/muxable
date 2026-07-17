@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.dellroad</groupId>
         <artifactId>dellroad-dependencies</artifactId>
-        <version>3.2.5.0</version>
+        <version>3.4.5.5</version>
     </parent>
     <artifactId>muxable</artifactId>
     <name>Muxable</name>
@@ -50,9 +50,7 @@
         <java.version>17</java.version>
 
         <!-- Dependency versions -->
-        <dellroad-stuff.version>3.0.6</dellroad-stuff.version>
         <testng.version>7.7.0</testng.version>
-        <maven-checkstyle-plugin.version>3.4.0</maven-checkstyle-plugin.version>
     </properties>
 
     <dependencies>
