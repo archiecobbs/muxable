@@ -45,21 +45,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <configuration>
-                    <additionalDependencies>
-                        <additionalDependency>
-                            <groupId>${project.groupId}</groupId>
-                            <artifactId>muxable-api</artifactId>
-                            <version>${project.version}</version>
-                        </additionalDependency>
-                    </additionalDependencies>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>

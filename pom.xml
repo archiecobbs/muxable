@@ -250,8 +250,8 @@
                     <notimestamp>true</notimestamp>
                     <validateLinks>true</validateLinks>
                     <doclint>-reference,-missing</doclint>
-                    <links>
-                        <link>http://permazen.github.io/permazen/site/apidocs/</link>
+                    <links combine.children="append">
+                        <link>https://permazen.github.io/permazen/site/apidocs/</link>
                         <link>https://archiecobbs.github.io/dellroad-stuff/site/apidocs/</link>
                         <link>https://www.slf4j.org/apidocs/</link>
                     </links>
